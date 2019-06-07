@@ -1,0 +1,55 @@
+version: '2'
+
+services:
+  boty-redis:
+    image: "redis:alpine"
+    container_name: "boty-redis"
+    ports:
+      - "6379:6379"
+    networks:
+      - boty-net
+  boty-nginx:
+    build: "./.docker/nginx-ubuntu/"
+    container_name: "boty-nginx"
+    volumes_from:
+      - boty-php
+    depends_on:
+      - boty-mysql
+    restart: unless-stopped
+    ports:
+      - "80:80"
+      - "443:443"
+    networks:
+      - boty-net
+  boty-php:
+    build: "./.docker/php-ubuntu/"
+    container_name: "boty-php"
+    depends_on:
+      - boty-mysql
+      - boty-redis
+    volumes:
+      - ./api/:/var/www/html/api/
+      - ./frontend/:/var/www/html/frontend/
+    networks:
+      - boty-net
+  boty-mysql:
+    image: mysql:8.0
+    container_name: "boty-mysql"
+    volumes:
+      - ./.docker/mysql-data:/docker-entrypoint-initdb.d
+      - ./.docker/mysql/config:/etc/mysql/conf.d
+    environment:
+      MYSQL_ROOT_PASSWORD: "Auto-123"
+      MYSQL_DATABASE: "symfony"
+      MYSQL_USER: "BOTY"
+      MYSQL_PASSWORD: "Auto-123"
+    ports:
+      - "3306:3306"
+    expose:
+      - "3306"
+    networks:
+      - boty-net
+
+networks:
+  boty-net:
+    driver: bridge
