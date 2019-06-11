@@ -6,7 +6,15 @@
         {% block stylesheets %}{% endblock %}
     </head>
     <body>
-        {% block body %}{% endblock %}
+        <style>
+            .wrapper {
+                max-width: 1200px;
+                margin: 0 auto;
+            }
+        </style>
+        <div class="wrapper">
+            {% block body %}{% endblock %}
+        </div>
         {% block javascripts %}{% endblock %}
     </body>
 </html>
