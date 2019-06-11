@@ -6,5 +6,5 @@ COPY files/makecert.sh /usr/local/bin/makecert
 RUN chmod +x /usr/local/bin/makecert
 RUN makecert boty.local
 
-COPY files/boty.conf /etc/nginx/conf.d/
+COPY files/001-main.conf /etc/nginx/conf.d/
 RUN rm /etc/nginx/conf.d/default.conf

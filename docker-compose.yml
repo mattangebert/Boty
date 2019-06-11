@@ -1,48 +1,83 @@
-version: '2'
+# @template: nginx-php71
+# @title: Nginx 1.12, PHP 7.1, MariaDB 10.1
+# @version: 1.1.0
+#
+# @project: boty
+# @domain: boty.local
+# @docroot: html
+
+version: "2"
 
 services:
   boty-nginx:
-    build: "./.docker/nginx-ubuntu/"
+    build: "./docker/nginx/"
     container_name: "boty-nginx"
-    volumes_from:
-      - boty-php
-    depends_on:
-      - boty-mysql
+    volumes:
+      - ./symfony:/var/www/html
+      - /etc/ssl/nginx/
     restart: unless-stopped
     ports:
-      - "80:80"
-      - "443:443"
+      - 80:80
+      - 443:443
     networks:
-      - boty-net
+      - boty-network
+
+  boty-mysql:
+    build: "./docker/mysql/"
+    container_name: "boty-mysql"
+    environment:
+      MYSQL_ROOT_PASSWORD: "root"
+      MYSQL_DATABASE: "boty"
+      MYSQL_PASSWORD: "boty"
+      MYSQL_USER: "boty"
+    volumes:
+      - /var/lib/mysql
+    restart: unless-stopped
+    ports:
+      - 3306:3306
+    networks:
+      - boty-network
+
   boty-php:
-    build: "./.docker/php-ubuntu/"
+    build: "./docker/php/"
     container_name: "boty-php"
+    volumes:
+      - ./symfony:/var/www/html
+    restart: unless-stopped
+    ports:
+      - 9000
+    networks:
+      - boty-network
+
+  boty-phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: "boty-phpmyadmin"
+    links:
+      - boty-mysql:mysql
     depends_on:
       - boty-mysql
-    volumes:
-      - ./public/:/var/www/html/
-    networks:
-      - boty-net
     ports:
-      - "9000"
-  boty-mysql:
-    image: mysql:8.0
-    container_name: "boty-mysql"
-    volumes:
-      - ./.docker/mysql-data:/docker-entrypoint-initdb.d
-      - ./.docker/mysql/config:/etc/mysql/conf.d
+      - 2080:80
     environment:
-      MYSQL_ROOT_PASSWORD: "Auto-123"
-      MYSQL_DATABASE: "symfony"
-      MYSQL_USER: "BOTY"
-      MYSQL_PASSWORD: "Auto-123"
-    ports:
-      - "3306:3306"
-    expose:
-      - "3306"
+      MYSQL_ROOT_PASSWORD: "root"
+      PMA_HOST: boty-mysql
+      PMA_USER: root
+      PMA_PASSWORD: root
     networks:
-      - boty-net
+      - boty-network
+
+  boty-mail:
+    image: mailhog/mailhog
+    container_name: "boty-mail"
+    user: root
+    ports:
+      - 1080:80
+    environment:
+      MH_API_BIND_ADDR: 0.0.0.0:80
+      MH_UI_BIND_ADDR: 0.0.0.0:80
+    networks:
+      - boty-network
 
 networks:
-  boty-net:
+  boty-network:
     driver: bridge
