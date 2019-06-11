@@ -13,7 +13,7 @@
         "symfony/dotenv": "*",
         "symfony/expression-language": "*",
         "symfony/flex": "^1.1",
-        "symfony/form": "*",
+        "symfony/form": "4.3.*",
         "symfony/framework-bundle": "*",
         "symfony/http-client": "*",
         "symfony/intl": "*",
@@ -30,6 +30,7 @@
         "symfony/yaml": "*"
     },
     "require-dev": {
+        "doctrine/doctrine-fixtures-bundle": "^3.2",
         "symfony/debug-pack": "*",
         "symfony/maker-bundle": "^1.11",
         "symfony/profiler-pack": "*",
