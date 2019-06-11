@@ -1,13 +1,6 @@
 version: '2'
 
 services:
-  boty-redis:
-    image: "redis:alpine"
-    container_name: "boty-redis"
-    ports:
-      - "6379:6379"
-    networks:
-      - boty-net
   boty-nginx:
     build: "./.docker/nginx-ubuntu/"
     container_name: "boty-nginx"
@@ -26,12 +19,12 @@ services:
     container_name: "boty-php"
     depends_on:
       - boty-mysql
-      - boty-redis
     volumes:
-      - ./api/:/var/www/html/api/
-      - ./frontend/:/var/www/html/frontend/
+      - ./public/:/var/www/html/
     networks:
       - boty-net
+    ports:
+      - "9000"
   boty-mysql:
     image: mysql:8.0
     container_name: "boty-mysql"

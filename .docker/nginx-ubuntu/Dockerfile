@@ -1,34 +1,10 @@
-FROM ubuntu:18.04
+FROM nginx:1-alpine
 
-ENV TZ=Europe/Minsk
-RUN ln -snf /usr/share/zoneinfo/$TZ /etc/localtime && echo $TZ > /etc/timezone
+RUN apk add --update openssl
 
-## Install tools
-RUN apt-get update --fix-missing \
-    && apt-get upgrade -y \
-    && apt-get dist-upgrade -y \
-    && apt-get install -y software-properties-common curl language-pack-en-base
+COPY files/makecert.sh /usr/local/bin/makecert
+RUN chmod +x /usr/local/bin/makecert
+RUN makecert boty.local
 
-# Add nginx mainline Repository
-RUN add-apt-repository ppa:nginx/development
-
-RUN apt-get update && apt-get -y upgrade
-
-RUN apt-get install -y ca-certificates ssl-cert nginx
-
-COPY config/api.boty.dev /etc/nginx/sites-available/
-COPY config/www.boty.dev /etc/nginx/sites-available/
-
-RUN make-ssl-cert generate-default-snakeoil --force-overwrite
-
-RUN ln -s /etc/nginx/sites-available/api.boty.dev /etc/nginx/sites-enabled/api.boty.dev
-RUN ln -s /etc/nginx/sites-available/www.boty.dev /etc/nginx/sites-enabled/www.boty.dev
-RUN rm /etc/nginx/sites-enabled/default
-
-RUN usermod -u 1000 www-data
-
-EXPOSE 80
-EXPOSE 443
-EXPOSE 8080
-
-CMD ["nginx", "-g", "daemon off;"]
+COPY files/boty.conf /etc/nginx/conf.d/
+RUN rm /etc/nginx/conf.d/default.conf
