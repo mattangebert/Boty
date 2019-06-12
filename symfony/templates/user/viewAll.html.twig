@@ -3,31 +3,9 @@
 {% block title %}Hello UserController!{% endblock %}
 
 {% block body %}
-    <style>
-        * {
-            box-sizing: border-box;
-        }
-        .user-list {
-            list-style-type: none;
-            width: 100%;
-            display: flex;
-            flex-wrap: wrap;
-            padding: 0;
-        }
-
-        .user-list > li {
-            flex: 0 0 20%;
-            border: 1px solid grey;
-            padding: 1em;
-            display: flex;
-            align-items: flex-end;
-            justify-content : space-around;
-        }
-    </style>
-
     <div class="example-wrapper">
         <h1>Users</h1>
-        <ul class="user-list">
+        <ul class="table-list">
             <li>Email:</li>
             <li>Roles</li>
             <li>Name</li>

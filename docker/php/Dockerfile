@@ -46,3 +46,8 @@ RUN echo "TLS_REQCERT never" > /etc/ldap/ldap.conf
 RUN usermod -u 1000 www-data
 
 CMD ["/usr/local/bin/startup"]
+
+RUN apt-get install curl
+RUN curl -sS https://dl.yarnpkg.com/debian/pubkey.gpg | sudo apt-key add -
+RUN  apt-get update && apt-get install yarn
+#RUN yarn install
