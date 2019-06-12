@@ -32,7 +32,7 @@ class AppFixtures extends Fixture
     );
 
     private $phraseTypes = array(
-        'Default',
+        'DefaultType',
         'Question',
         'Answer',
         'Statement',
@@ -42,7 +42,7 @@ class AppFixtures extends Fixture
     );
 
     private $personalityTypes = array(
-        'Default',
+        'Normal',
         'Formal',
         'Informal',
         'Flowery',
@@ -97,7 +97,7 @@ class AppFixtures extends Fixture
             $category->setName($categoryName);
 
             $manager->persist($category);
-            //$this->addReference($categoryName, $category);
+            $this->addReference($categoryName, $category);
         }
 
         $manager->flush();
@@ -113,7 +113,7 @@ class AppFixtures extends Fixture
             $phraseType->setName($type);
 
             $manager->persist($phraseType);
-            //$this->addReference($type, $phraseType);
+            $this->addReference($type, $phraseType);
 
         }
 
@@ -195,10 +195,26 @@ class AppFixtures extends Fixture
     private function createPhraseFixtures(ObjectManager $manager)
     {
         foreach ($this->personalityTypes as $personalityTypeName) {
+            /** @var PersonalityType $personalityType */
+            $personalityType = $this->getReference($personalityTypeName);
+
             foreach ($this->categories as $categoryName) {
+                /** @var Category $category */
+                $category = $this->getReference($categoryName);
+
                 foreach ($this->phraseTypes as $phraseTypeName) {
+                    /** @var PhraseType $phraseType */
+                    $phraseType = $this->getReference($phraseTypeName);
+
                     for($i = 0; $i < 10; $i++) {
-                        $phrase = new Phrase()
+                        $phrase = new Phrase();
+                        $phrase->setPersonalityType($personalityType);
+                        $phrase->setCategory($category);
+                        $phrase->setPhraseType($phraseType);
+                        $phrase->setPhrase('This is the ' . $i . 'th Test Phrase of type: ' . $phraseTypeName . ' of the category: ' . $categoryName . 'with the personalityType: ' . $personalityTypeName);
+
+                        $manager->persist($phrase);
+                        //$this->addReference('phrase-'.$phraseTypeName.'-'.$categoryName.'-'.$personalityType, $phrase);
                     }
                 }
             }
