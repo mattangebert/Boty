@@ -10,15 +10,6 @@ use Symfony\Component\Routing\Annotation\Route;
 
 class UserController extends AbstractController
 {
-    /**
-     * @Route("/user", name="user")
-     */
-    public function index()
-    {
-        return $this->render('user/index.html.twig', [
-            'controller_name' => 'UserController',
-        ]);
-    }
 
     /**
      * @Route("/user/{id}", name="user_show")
@@ -68,7 +59,6 @@ class UserController extends AbstractController
         $user = $this->getUserById($id);
 
         return $this->handleForm($user, $request);
-
     }
 
 //    /**
@@ -78,7 +68,6 @@ class UserController extends AbstractController
 //        $user = new User();
 //
 //        return $this->handleForm($user, $request);
-//
 //    }
 
     private function handleForm(User $user, Request $request)

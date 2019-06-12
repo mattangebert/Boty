@@ -15,12 +15,16 @@
   }
 
   > li {
-    flex: 0 0 20%;
+    flex: 0 0 50%;
     border: 1px solid grey;
     padding: 1em;
     display: flex;
     align-items: flex-end;
     justify-content : space-around;
+  }
+
+  &.table-list-5 > li {
+    flex: 0 0 20%;
   }
 }
 
@@ -60,4 +64,8 @@ button {
     background-color: darkblue;
     color: white;
   }
+}
+
+.bold {
+  font-weight: bold;
 }

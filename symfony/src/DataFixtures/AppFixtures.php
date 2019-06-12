@@ -206,12 +206,12 @@ class AppFixtures extends Fixture
                     /** @var PhraseType $phraseType */
                     $phraseType = $this->getReference($phraseTypeName);
 
-                    for($i = 0; $i < 10; $i++) {
+                    for($i = 0; $i < rand(2, 10); $i++) {
                         $phrase = new Phrase();
                         $phrase->setPersonalityType($personalityType);
                         $phrase->setCategory($category);
                         $phrase->setPhraseType($phraseType);
-                        $phrase->setPhrase('This is the ' . $i . 'th Test Phrase of type: ' . $phraseTypeName . ' of the category: ' . $categoryName . 'with the personalityType: ' . $personalityTypeName);
+                        $phrase->setPhrase('This is the ' . $i . 'th Test Phrase of type: ' . $phraseTypeName . ' of the category: ' . $categoryName . ' with the personalityType: ' . $personalityTypeName);
 
                         $manager->persist($phrase);
                         //$this->addReference('phrase-'.$phraseTypeName.'-'.$categoryName.'-'.$personalityType, $phrase);
