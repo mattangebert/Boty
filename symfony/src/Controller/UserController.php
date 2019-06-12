@@ -71,15 +71,15 @@ class UserController extends AbstractController
 
     }
 
-    /**
-     * @Route("/users/new/", name="user_create")
-     */
-    public function newUser(Request $request) {
-        $user = new User();
-
-        return $this->handleForm($user, $request);
-
-    }
+//    /**
+//     * @Route("/users/new/", name="user_create")
+//     */
+//    public function newUser(Request $request) {
+//        $user = new User();
+//
+//        return $this->handleForm($user, $request);
+//
+//    }
 
     private function handleForm(User $user, Request $request)
     {

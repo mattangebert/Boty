@@ -12,6 +12,19 @@
                 margin: 0 auto;
             }
         </style>
+        <nav class="nav">
+            <h1>Navigation</h1>
+            <ul>
+                <li><a href="/">Home</a></li>
+                <li><a href="/users">Users</a></li>
+                {% if is_granted('IS_AUTHENTICATED_FULLY') %}
+                    <li><a href="/logout">Logout</a></li>
+                {% else %}
+                    <li><a href="/login">Login</a></li>
+                    <li><a href="/register">Register</a></li>
+                {% endif %}
+            </ul>
+        </nav>
         <div class="wrapper">
             {% block body %}{% endblock %}
         </div>
