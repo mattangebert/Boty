@@ -30,10 +30,10 @@ class Phrase
     private $phraseTyp;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\PersonalityType")
+     * @ORM\ManyToOne(targetEntity="App\Entity\PersonalityTyp")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $personalityType;
+    private $personalityTyp;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="phrases")
@@ -80,14 +80,14 @@ class Phrase
         return $this;
     }
 
-    public function getPersonalityType(): ?PersonalityType
+    public function getPersonalityTyp(): ?PersonalityTyp
     {
-        return $this->personalityType;
+        return $this->personalityTyp;
     }
 
-    public function setPersonalityType(?PersonalityType $personalityType): self
+    public function setPersonalityTyp(?PersonalityTyp $personalityTyp): self
     {
-        $this->personalityType = $personalityType;
+        $this->personalityTyp = $personalityTyp;
 
         return $this;
     }

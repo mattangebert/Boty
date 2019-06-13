@@ -22,15 +22,15 @@ class Personality
     private $name;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\PersonalityType")
+     * @ORM\ManyToOne(targetEntity="App\Entity\PersonalityTyp")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $personalityTypeOne;
+    private $personalityTypOne;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\PersonalityType")
+     * @ORM\ManyToOne(targetEntity="App\Entity\PersonalityTyp")
      */
-    private $personalityTypeTwo;
+    private $personalityTypTwo;
 
     public function getId(): ?int
     {
@@ -49,26 +49,26 @@ class Personality
         return $this;
     }
 
-    public function getPersonalityTypeOne(): ?PersonalityType
+    public function getPersonalityTypOne(): ?PersonalityTyp
     {
-        return $this->personalityTypeOne;
+        return $this->personalityTypOne;
     }
 
-    public function setPersonalityTypeOne(?PersonalityType $personalityTypeOne): self
+    public function setPersonalityTypOne(?PersonalityTyp $personalityTypOne): self
     {
-        $this->personalityTypeOne = $personalityTypeOne;
+        $this->personalityTypOne = $personalityTypOne;
 
         return $this;
     }
 
-    public function getPersonalityTypeTwo(): ?PersonalityType
+    public function getPersonalityTypTwo(): ?PersonalityTyp
     {
-        return $this->personalityTypeTwo;
+        return $this->personalityTypTwo;
     }
 
-    public function setPersonalityTypeTwo(?PersonalityType $personalityTypeTwo): self
+    public function setPersonalityTypTwo(?PersonalityTyp $personalityTypTwo): self
     {
-        $this->personalityTypeTwo = $personalityTypeTwo;
+        $this->personalityTypTwo = $personalityTypTwo;
 
         return $this;
     }

@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\PersonalityType;
+use App\Entity\PersonalityTyp;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method PersonalityType|null find($id, $lockMode = null, $lockVersion = null)
- * @method PersonalityType|null findOneBy(array $criteria, array $orderBy = null)
- * @method PersonalityType[]    findAll()
- * @method PersonalityType[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method PersonalityTyp|null find($id, $lockMode = null, $lockVersion = null)
+ * @method PersonalityTyp|null findOneBy(array $criteria, array $orderBy = null)
+ * @method PersonalityTyp[]    findAll()
+ * @method PersonalityTyp[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class PersonalityTypeRepository extends ServiceEntityRepository
+class PersonalityTypRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, PersonalityType::class);
+        parent::__construct($registry, PersonalityTyp::class);
     }
 
     // /**
-    //  * @return PersonalityType[] Returns an array of PersonalityType objects
+    //  * @return PersonalityTyp[] Returns an array of PersonalityTyp objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class PersonalityTypeRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?PersonalityType
+    public function findOneBySomeField($value): ?PersonalityTyp
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.exampleField = :val')
