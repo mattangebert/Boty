@@ -1,0 +1,34 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserController!{% endblock %}
+
+{% block body %}
+    <div class="example-wrapper">
+        <h3>Bots</h3>
+        <ul class="table-list table-list-5">
+            <li class="bold">Bot Name</li>
+            <li class="bold">Personality</li>
+            <li class="bold">CreatedAt</li>
+            <li class="bold">Status</li>
+            <li></li>
+
+            {% for bot in bots %}
+                <li>{{ bot.name }}</li>
+                <li>{{ bot.personality.name }}</li>
+                <li>{{ bot.createdAt | date('Y-m-d H:i:s')}}</li>
+                <li>
+                    {% if  bot.enabled %}
+                        Enabled
+                    {% else %}
+                        Disabled
+                    {% endif %}
+                </li>
+                <li>
+                    <a href="/bot/delete/{{ bot.id }}">Delete</a>
+                    <a href="/bot/edit/{{ bot.id }}">Edit</a>
+                </li>
+            {% endfor %}
+        </ul>
+        <a href="/bots/new">New Bot</a>
+    </div>
+{% endblock %}

@@ -37,6 +37,11 @@ class Bot
      */
     private $personality;
 
+    public function __construct()
+    {
+        $this->setCreatedAt(new \DateTime());
+    }
+
     public function getId(): ?int
     {
         return $this->id;
