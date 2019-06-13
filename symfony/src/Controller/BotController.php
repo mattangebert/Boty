@@ -76,7 +76,7 @@ class BotController extends AbstractController
             return $this->redirectToRoute('bot_show_all', ['id' => $bot->getId()]);
         }
 
-        return $this->render('base/form.html.twig', [
+        return $this->render('default/form.html.twig', [
             'form' => $form->createView(),
         ]);
     }

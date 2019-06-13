@@ -74,7 +74,7 @@ class CategoryController extends AbstractController
             return $this->redirectToRoute('category_show_all', ['id' => $category->getId()]);
         }
 
-        return $this->render('base/form.html.twig', [
+        return $this->render('default/form.html.twig', [
             'form' => $form->createView(),
         ]);
     }

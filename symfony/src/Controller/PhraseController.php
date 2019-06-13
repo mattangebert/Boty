@@ -76,7 +76,7 @@ class PhraseController extends AbstractController
             return $this->redirectToRoute('phrase_show_all', ['id' => $phrase->getId()]);
         }
 
-        return $this->render('base/form.html.twig', [
+        return $this->render('default/form.html.twig', [
             'form' => $form->createView(),
         ]);
     }

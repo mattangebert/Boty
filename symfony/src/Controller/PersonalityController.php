@@ -74,7 +74,7 @@ class PersonalityController extends AbstractController
             return $this->redirectToRoute('personality_show_all', ['id' => $personality->getId()]);
         }
 
-        return $this->render('base/form.html.twig', [
+        return $this->render('default/form.html.twig', [
             'form' => $form->createView(),
         ]);
     }
