@@ -18,13 +18,13 @@ class PhraseToReply
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Phrase")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $Phrase;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Phrase")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $ReplyPhrase;
 

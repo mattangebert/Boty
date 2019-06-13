@@ -25,19 +25,19 @@ class Phrase
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\PhraseTyp", inversedBy="phrases")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $phraseTyp;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\PersonalityTyp")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $personalityTyp;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Category", inversedBy="phrases")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $category;
 

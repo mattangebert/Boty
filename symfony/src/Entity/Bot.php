@@ -33,7 +33,7 @@ class Bot
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Personality")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $personality;
 

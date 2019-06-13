@@ -18,13 +18,13 @@ class PhraseToAlternative
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Phrase", inversedBy="alternativePhrases")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $Phrase;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Phrase")
-     * @ORM\JoinColumn(nullable=false)
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
     private $AlternativePhrase;
 
