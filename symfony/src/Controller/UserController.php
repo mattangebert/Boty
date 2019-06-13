@@ -55,7 +55,9 @@ class UserController extends AbstractController
     /**
      * @Route("/user/edit/{id}", name="user_edit")
      */
-    public function editUser($id, Request $request) {
+    public function editUser($id, Request $request)
+    {
+        /** @var User $user */
         $user = $this->getUserById($id);
 
         return $this->handleForm($user, $request);
@@ -85,7 +87,7 @@ class UserController extends AbstractController
             return $this->redirectToRoute('user_show', ['id' => $user->getId()]);
         }
 
-        return $this->render('user/edit.html.twig', [
+        return $this->render('base/form.html.twig', [
             'form' => $form->createView(),
         ]);
     }

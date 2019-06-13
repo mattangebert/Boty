@@ -41,7 +41,9 @@ class CategoryController extends AbstractController
     /**
      * @Route("/category/edit/{id}", name="category_edit")
      */
-    public function editCategory($id, Request $request) {
+    public function editCategory($id, Request $request)
+    {
+        /** @var Category $category */
         $category = $this->getCategoryById($id);
 
         return $this->handleForm($category, $request);
@@ -50,7 +52,8 @@ class CategoryController extends AbstractController
     /**
      * @Route("/categories/new/", name="category_create")
      */
-    public function newCategory(Request $request) {
+    public function newCategory(Request $request)
+    {
         $category = new Category();
 
         return $this->handleForm($category, $request);
@@ -71,12 +74,13 @@ class CategoryController extends AbstractController
             return $this->redirectToRoute('category_show_all', ['id' => $category->getId()]);
         }
 
-        return $this->render('category/edit.html.twig', [
+        return $this->render('base/form.html.twig', [
             'form' => $form->createView(),
         ]);
     }
 
-    private function getCategoryById($id) {
+    private function getCategoryById($id)
+    {
         $category = $this->getDoctrine()
             ->getRepository(Category::class)
             ->find($id);

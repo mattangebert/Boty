@@ -7,7 +7,7 @@ use App\Entity\Category;
 use App\Entity\Personality;
 use App\Entity\PersonalityType;
 use App\Entity\Phrase;
-use App\Entity\PhraseType;
+use App\Entity\PhraseTyp;
 use App\Entity\User;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Common\Persistence\ObjectManager;
@@ -31,7 +31,7 @@ class AppFixtures extends Fixture
         'Weird'
     );
 
-    private $phraseTypes = array(
+    private $phraseTyps = array(
         'DefaultType',
         'Question',
         'Answer',
@@ -59,7 +59,7 @@ class AppFixtures extends Fixture
     {
         $this->createUserFixtures($manager);
         $this->createCategoryFixtures($manager);
-        $this->createPhraseTypeFixtures($manager);
+        $this->createPhraseTypFixtures($manager);
         $this->createPersonalityTypeFixtures($manager);
         $this->createPersonalityFixtures($manager);
         $this->createBotFixtures($manager);
@@ -103,17 +103,17 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 
-    private function createPhraseTypeFixtures(ObjectManager $manager)
+    private function createPhraseTypFixtures(ObjectManager $manager)
     {
         /**
-         * create test phraseTypes
+         * create test phraseTyps
          */
-        foreach ($this->phraseTypes as $type) {
-            $phraseType =  new PhraseType();
-            $phraseType->setName($type);
+        foreach ($this->phraseTyps as $typ) {
+            $phraseTyp =  new PhraseTyp();
+            $phraseTyp->setName($typ);
 
-            $manager->persist($phraseType);
-            $this->addReference($type, $phraseType);
+            $manager->persist($phraseTyp);
+            $this->addReference($typ, $phraseTyp);
 
         }
 
@@ -202,19 +202,19 @@ class AppFixtures extends Fixture
                 /** @var Category $category */
                 $category = $this->getReference($categoryName);
 
-                foreach ($this->phraseTypes as $phraseTypeName) {
-                    /** @var PhraseType $phraseType */
-                    $phraseType = $this->getReference($phraseTypeName);
+                foreach ($this->phraseTyps as $phraseTypName) {
+                    /** @var PhraseTyp $phraseTyp */
+                    $phraseTyp = $this->getReference($phraseTypName);
 
                     for($i = 0; $i < rand(2, 10); $i++) {
                         $phrase = new Phrase();
                         $phrase->setPersonalityType($personalityType);
                         $phrase->setCategory($category);
-                        $phrase->setPhraseType($phraseType);
-                        $phrase->setPhrase('This is the ' . $i . 'th Test Phrase of type: ' . $phraseTypeName . ' of the category: ' . $categoryName . ' with the personalityType: ' . $personalityTypeName);
+                        $phrase->setPhraseTyp($phraseTyp);
+                        $phrase->setPhrase('This is the ' . $i . 'th Test Phrase of type: ' . $phraseTypName . ' of the category: ' . $categoryName . ' with the personalityType: ' . $personalityTypeName);
 
                         $manager->persist($phrase);
-                        //$this->addReference('phrase-'.$phraseTypeName.'-'.$categoryName.'-'.$personalityType, $phrase);
+                        //$this->addReference('phrase-'.$phraseTypName.'-'.$categoryName.'-'.$personalityType, $phrase);
                     }
                 }
             }

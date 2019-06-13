@@ -2,25 +2,25 @@
 
 namespace App\Repository;
 
-use App\Entity\PhraseType;
+use App\Entity\PhraseTyp;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
- * @method PhraseType|null find($id, $lockMode = null, $lockVersion = null)
- * @method PhraseType|null findOneBy(array $criteria, array $orderBy = null)
- * @method PhraseType[]    findAll()
- * @method PhraseType[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
+ * @method PhraseTyp|null find($id, $lockMode = null, $lockVersion = null)
+ * @method PhraseTyp|null findOneBy(array $criteria, array $orderBy = null)
+ * @method PhraseTyp[]    findAll()
+ * @method PhraseTyp[]    findBy(array $criteria, array $orderBy = null, $limit = null, $offset = null)
  */
-class PhraseTypeRepository extends ServiceEntityRepository
+class PhraseTypRepository extends ServiceEntityRepository
 {
     public function __construct(RegistryInterface $registry)
     {
-        parent::__construct($registry, PhraseType::class);
+        parent::__construct($registry, PhraseTyp::class);
     }
 
     // /**
-    //  * @return PhraseType[] Returns an array of PhraseType objects
+    //  * @return PhraseTyp[] Returns an array of PhraseTyp objects
     //  */
     /*
     public function findByExampleField($value)
@@ -37,7 +37,7 @@ class PhraseTypeRepository extends ServiceEntityRepository
     */
 
     /*
-    public function findOneBySomeField($value): ?PhraseType
+    public function findOneBySomeField($value): ?PhraseTyp
     {
         return $this->createQueryBuilder('p')
             ->andWhere('p.exampleField = :val')

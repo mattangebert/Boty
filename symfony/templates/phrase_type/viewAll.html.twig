@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserController!{% endblock %}
+
+{% block body %}
+    <div class="example-wrapper">
+        <h3>PhraseTyps</h3>
+        <ul class="table-list">
+            <li class="bold">PhraseTyp Name:</li>
+            <li></li>
+
+            {% for phraseTyp in phraseTyps %}
+                <li>{{ phraseTyp.name }}</li>
+                <li>
+                    <a href="/phraseTyp/delete/{{ phraseTyp.id }}">Delete</a>
+                    <a href="/phraseTyp/edit/{{ phraseTyp.id }}">Edit</a>
+                </li>
+            {% endfor %}
+        </ul>
+        <a href="/phraseTyps/new">New PhraseTyp</a>
+    </div>
+{% endblock %}

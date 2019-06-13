@@ -7,9 +7,9 @@ use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass="App\Repository\PhraseTypeRepository")
+ * @ORM\Entity(repositoryClass="App\Repository\PhraseTypRepository")
  */
-class PhraseType
+class PhraseTyp
 {
     /**
      * @ORM\Id()
@@ -24,7 +24,7 @@ class PhraseType
     private $name;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\Phrase", mappedBy="PhraseType")
+     * @ORM\OneToMany(targetEntity="App\Entity\Phrase", mappedBy="phraseTyp")
      */
     private $phrases;
 
@@ -62,7 +62,7 @@ class PhraseType
     {
         if (!$this->phrases->contains($phrase)) {
             $this->phrases[] = $phrase;
-            $phrase->setPhraseType($this);
+            $phrase->setPhraseTyp($this);
         }
 
         return $this;
@@ -73,8 +73,8 @@ class PhraseType
         if ($this->phrases->contains($phrase)) {
             $this->phrases->removeElement($phrase);
             // set the owning side to null (unless already changed)
-            if ($phrase->getPhraseType() === $this) {
-                $phrase->setPhraseType(null);
+            if ($phrase->getPhraseTyp() === $this) {
+                $phrase->setPhraseTyp(null);
             }
         }
 

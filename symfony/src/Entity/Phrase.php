@@ -24,10 +24,10 @@ class Phrase
     private $phrase;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\PhraseType", inversedBy="phrases")
+     * @ORM\ManyToOne(targetEntity="App\Entity\PhraseTyp", inversedBy="phrases")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $phraseType;
+    private $phraseTyp;
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\PersonalityType")
@@ -68,14 +68,14 @@ class Phrase
         return $this;
     }
 
-    public function getPhraseType(): ?PhraseType
+    public function getPhraseTyp(): ?PhraseTyp
     {
-        return $this->phraseType;
+        return $this->phraseTyp;
     }
 
-    public function setPhraseType(?PhraseType $phraseType): self
+    public function setPhraseTyp(?PhraseTyp $phraseTyp): self
     {
-        $this->phraseType = $phraseType;
+        $this->phraseTyp = $phraseTyp;
 
         return $this;
     }
