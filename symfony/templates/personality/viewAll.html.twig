@@ -14,7 +14,11 @@
             {% for personality in personalities %}
                 <li>{{ personality.name }}</li>
                 <li>{{ personality.personalityTypOne.name }}</li>
-                <li>{{ personality.personalityTypTwo.name }}</li>
+                <li>
+                    {% if personality.personalityTypTwo %}
+                        {{ personality.personalityTypTwo.name }}
+                    {% endif %}
+                </li>
                 <li>
                     <a href="/personality/delete/{{ personality.id }}">Delete</a>
                     <a href="/personality/edit/{{ personality.id }}">Edit</a>

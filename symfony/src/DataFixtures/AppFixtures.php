@@ -47,7 +47,8 @@ class AppFixtures extends Fixture
         'Informal',
         'Flowery',
         'Mean',
-        'Crazy'
+        'Crazy',
+        'Vegan'
     );
 
     public function __construct(UserPasswordEncoderInterface $passwordEncoder)
@@ -66,6 +67,8 @@ class AppFixtures extends Fixture
         $this->createPhraseFixtures($manager);
         $this->createPhraseToAlternativeFixtures($manager);
         $this->createPhraseToReplyFixtures($manager);
+
+        $this->createBotMelanie($manager);
     }
 
     private function createUserFixtures(ObjectManager $manager)
@@ -189,6 +192,28 @@ class AppFixtures extends Fixture
             //$this->addReference('bot'.$i, $bot);
         }
 
+        $manager->flush();
+    }
+
+    private function createBotMelanie(ObjectManager $manager)
+    {
+        $personality =  new Personality();
+
+        /** @var PersonalityTyp $refOne */
+        $refOne = $this->getReference('Vegan');
+        $personality->setName('Veganer');
+        $personality->setPersonalityTypOne($refOne);
+        $manager->persist($personality);
+
+
+        $melanie =  new Bot();
+
+        $melanie->setName('Melanie');
+        $melanie->setEnabled(true);
+        $melanie->setCreatedAt(new \DateTime());
+        $melanie->setPersonality($personality);
+
+        $manager->persist($melanie);
         $manager->flush();
     }
 

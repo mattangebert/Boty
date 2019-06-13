@@ -29,6 +29,7 @@ class Personality
 
     /**
      * @ORM\ManyToOne(targetEntity="App\Entity\PersonalityTyp")
+     * @ORM\JoinColumn(nullable=true, onDelete="CASCADE")
      */
     private $personalityTypTwo;
 
