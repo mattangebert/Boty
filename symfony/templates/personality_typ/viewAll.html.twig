@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserController!{% endblock %}
+
+{% block body %}
+    <div class="example-wrapper">
+        <h3>PersonalityTyps</h3>
+        <ul class="table-list">
+            <li class="bold">PersonalityTyp Name:</li>
+            <li></li>
+
+            {% for personalityTyp in personalityTyps %}
+                <li>{{ personalityTyp.name }}</li>
+                <li>
+                    <a href="/personalityTyp/delete/{{ personalityTyp.id }}">Delete</a>
+                    <a href="/personalityTyp/edit/{{ personalityTyp.id }}">Edit</a>
+                </li>
+            {% endfor %}
+        </ul>
+        <a href="/personalityTyps/new">New PersonalityTyp</a>
+    </div>
+{% endblock %}

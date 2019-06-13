@@ -19,7 +19,7 @@ class PhraseTypController extends AbstractController
             ->getRepository(PhraseTyp::class)
             ->findAll();
 
-        return $this->render('phrase_type/viewAll.html.twig', [
+        return $this->render('phrase_typ/viewAll.html.twig', [
             'phraseTyps' => $phraseTyps
         ]);
     }
