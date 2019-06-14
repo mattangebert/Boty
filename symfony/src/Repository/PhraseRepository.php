@@ -19,6 +19,31 @@ class PhraseRepository extends ServiceEntityRepository
         parent::__construct($registry, Phrase::class);
     }
 
+
+    public function findByFilters($cId, $pId, $ptId)
+    {
+        $qb = $this->createQueryBuilder('p');
+
+        if (is_numeric($cId)) {
+            $qb->andWhere('p.category = :cId');
+            $qb->setParameter('cId', $cId);
+        }
+
+        if (is_numeric($pId)) {
+            $qb->andWhere('p.phraseTyp = :pId');
+            $qb->setParameter('pId', $pId);
+        }
+
+        if (is_numeric($ptId)) {
+            $qb->andWhere('p.personalityTyp = :ptId');
+            $qb->setParameter('ptId', $ptId);
+        }
+
+
+        return $qb->getQuery()->getResult();
+
+    }
+
     // /**
     //  * @return Phrase[] Returns an array of Phrase objects
     //  */

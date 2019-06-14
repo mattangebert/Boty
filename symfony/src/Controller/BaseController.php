@@ -45,18 +45,55 @@ class BaseController extends AbstractController
 
     protected $entityName;
 
-    protected function showAllFromEntity()
+    protected function showAllFromEntity($additional = null)
     {
-        $entities = $this->getDoctrine()
-            ->getRepository($this->entityTypes[$this->entityName])
-            ->findAll();
+        $entities = $this->getAllFromEntity();
 
         $collectionName = $this->getCollectionName();
 
         $folderName = $this->getFolderPath();
 
         return $this->render($folderName.'/viewAll.html.twig', [
-            $collectionName => $entities
+            $collectionName => $entities,
+            'title' => $collectionName,
+            'additional' => $additional
+
+        ]);
+    }
+
+    protected function showAllFromEntityByRelation($relationEntityName, $additional, $rId)
+    {
+        $entities = $this->getDoctrine()
+            ->getRepository($this->entityTypes[$this->entityName])
+            ->findBy([
+                $relationEntityName => $rId,
+            ]);
+
+        $collectionName = $this->getCollectionName();
+
+        $folderName = $this->getFolderPath();
+
+        //$relationEntity = $this->getEntityById($rId, $relationEntityName);
+
+        return $this->render($folderName.'/viewAll.html.twig', [
+            $collectionName => $entities,
+            'title' => $collectionName,
+            'additional' => $additional
+        ]);
+    }
+
+
+    protected function showCollection($entities, $additional)
+    {
+
+        $collectionName = $this->getCollectionName();
+
+        $folderName = $this->getFolderPath();
+
+        return $this->render($folderName.'/viewAll.html.twig', [
+            $collectionName => $entities,
+            'title' => $collectionName,
+            'additional' => $additional
         ]);
     }
 
@@ -134,15 +171,33 @@ class BaseController extends AbstractController
         return $collectionName;
     }
 
-    protected function getEntityById($id)
+
+    protected function getAllFromEntity($entityName = '')
     {
+        if (!array_key_exists($entityName, $this->entityTypes)) {
+            $entityName = $this->entityName;
+        }
+
+        $entities = $this->getDoctrine()
+            ->getRepository($this->entityTypes[$entityName])
+            ->findAll();
+
+        return $entities;
+    }
+
+    protected function getEntityById($id, $entityName = '')
+    {
+        if (!array_key_exists($entityName, $this->entityTypes)) {
+            $entityName = $this->entityName;
+        }
+
         $entity = $this->getDoctrine()
-            ->getRepository($this->entityTypes[$this->entityName])
+            ->getRepository($this->entityTypes[$entityName])
             ->find($id);
 
         if (!$entity) {
             throw $this->createNotFoundException(
-                'Couldn\'t find ' . $this->entityName . 'for id ' .$id
+                'Couldn\'t find ' . $entityName. 'for id ' .$id
             );
         }
 

@@ -15,7 +15,37 @@ class PhraseController extends BaseController
      */
     public function showAllPhrase()
     {
-        return $this->showAllFromEntity();
+        $additional = [
+            'categories' => $this->getAllFromEntity('category'),
+            'categoryId' => 'all',
+            'phraseTyps' => $this->getAllFromEntity('phraseTyp'),
+            'phraseTypId' => 'all',
+            'personalityTyps' => $this->getAllFromEntity('personalityTyp'),
+            'personalityTypId' => 'all'
+        ];
+        return $this->showAllFromEntity($additional);
+    }
+
+
+    /**
+     * @Route("/phrases/category/{cId}/phraseTyp/{pId}/personalityTyp/{ptId}", name="phrase_show_by_filters")
+     */
+    public function showPhrasesByFilters($cId, $pId, $ptId)
+    {
+       $phrases = $this->getDoctrine()
+           ->getRepository(Phrase::class)
+           ->findByFilters($cId, $pId, $ptId);
+
+        $additional = [
+            'categories' => $this->getAllFromEntity('category'),
+            'categoryId' => $cId,
+            'phraseTyps' => $this->getAllFromEntity('phraseTyp'),
+            'phraseTypId' => $pId,
+            'personalityTyps' => $this->getAllFromEntity('personalityTyp'),
+            'personalityTypId' => $ptId
+        ];
+
+        return $this->showCollection($phrases, $additional);
     }
 
     /**
