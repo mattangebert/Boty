@@ -5,7 +5,7 @@
 {% block body %}
     <div class="example-wrapper">
         <h3>Categories</h3>
-        <a href="/categories/new">New Category</a>
+        <a href="{{ path('category_create') }}">New Category</a>
         <ul class="table-list">
             <li class="bold">Category Name</li>
             <li></li>
@@ -13,9 +13,9 @@
             {% for category in categories %}
                 <li>{{ category.name }}</li>
                 <li>
-                    <a href="/category/delete/{{ category.id }}">Delete</a>
-                    <a href="/category/edit/{{ category.id }}">Edit</a>
-                    <a href="/phrases/category/{{ category.id }}" >View Phrases</a>
+                    <a href="{{ path('category_delete', { 'id': category.id }) }}">Delete</a>
+                    <a href="{{ path('category_edit', { 'id': category.id }) }}">Edit</a>
+                    <a href="{{ path('phrase_show_by_filters',{'cId': category.id, 'pId': 'all', 'ptId': 'all' }) }}">View Phrases</a>
                 </li>
             {% endfor %}
         </ul>

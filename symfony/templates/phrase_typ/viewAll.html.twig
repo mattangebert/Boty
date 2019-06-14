@@ -5,7 +5,7 @@
 {% block body %}
     <div class="example-wrapper">
         <h3>PhraseTyps</h3>
-        <a href="/phraseTyps/new">New PhraseTyp</a>
+        <a href="{{ path('phraseTyp_create') }}">New PhraseTyp</a>
         <ul class="table-list">
             <li class="bold">PhraseTyp Name</li>
             <li></li>
@@ -13,8 +13,9 @@
             {% for phraseTyp in phraseTyps %}
                 <li>{{ phraseTyp.name }}</li>
                 <li>
-                    <a href="/phraseTyp/delete/{{ phraseTyp.id }}">Delete</a>
-                    <a href="/phraseTyp/edit/{{ phraseTyp.id }}">Edit</a>
+                    <a href="{{ path('phraseTyp_delete', { 'id': phraseTyp.id }) }}">Delete</a>
+                    <a href="{{ path('phraseTyp_edit', { 'id': phraseTyp.id }) }}">Edit</a>
+                    <a href="{{ path('phrase_show_by_filters',{'cId': 'all', 'pId': phraseTyp.id, 'ptId': 'all' }) }}">View Phrases</a>
                 </li>
             {% endfor %}
         </ul>

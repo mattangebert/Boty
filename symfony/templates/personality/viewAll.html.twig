@@ -5,7 +5,7 @@
 {% block body %}
     <div class="example-wrapper">
         <h3>Personalities</h3>
-        <a href="/personalities/new">New Personality</a>
+        <a href="{{ path('personality_create') }}">New Personality</a>
         <ul class="table-list table-list-4">
             <li class="bold">Personality Name</li>
             <li class="bold">Main Personality Typ</li>
@@ -21,8 +21,8 @@
                     {% endif %}
                 </li>
                 <li>
-                    <a href="/personality/delete/{{ personality.id }}">Delete</a>
-                    <a href="/personality/edit/{{ personality.id }}">Edit</a>
+                    <a href="{{ path('personality_delete', { 'id': personality.id }) }}">Delete</a>
+                    <a href="{{ path('personality_edit', { 'id': personality.id }) }}">Edit</a>
                 </li>
             {% endfor %}
         </ul>

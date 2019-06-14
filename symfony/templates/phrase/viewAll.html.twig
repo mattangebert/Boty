@@ -4,27 +4,19 @@
 
 {% block body %}
     <div class="example-wrapper">
-
-            <h3>{{ title }}</h3>
-
-            <a href="/phrases/new">New Phrase</a>
-
-
-
-
-
-
+        <h3>{{ title }}</h3>
+        <a href="{{ path('phrase_create')}}">New Phrase</a>
         <ul class="table-list table-list-5">
             <li class="bold">Phrase</li>
             <li class="bold table-headline-wrapper">
                 <div>Category</div>
                 <select onchange="location = this.value">
-                    <option value="/phrases/category/all/phraseTyp/{{ additional['phraseTypId'] }}/personalityTyp/{{ additional['personalityTypId'] }}">
+                    <option value="{{ path('phrase_show_by_filters',{'cId': 'all', 'pId': additional['phraseTypId'], 'ptId': additional['personalityTypId'] }) }}">
                         All
                     </option>
                     {% for category in additional['categories'] %}
                         <option
-                                value="/phrases/category/{{ category.id }}/phraseTyp/{{ additional['phraseTypId'] }}/personalityTyp/{{ additional['personalityTypId'] }}"
+                                value="{{ path('phrase_show_by_filters',{'cId': category.id, 'pId': additional['phraseTypId'], 'ptId': additional['personalityTypId'] }) }}"
                                 {{ category.id == additional['categoryId'] ? 'selected' }} >
                             {{ category.name }}
                         </option>
@@ -34,13 +26,13 @@
             <li class="bold table-headline-wrapper">
                 <div>Phrase Typ</div>
                 <select onchange="location = this.value">
-                    <option value="/phrases/category/{{ additional['categoryId'] }}/phraseTyp/all/personalityTyp/{{ additional['personalityTypId'] }}">
+                    <option value="{{ path('phrase_show_by_filters',{'cId': additional['categoryId'], 'pId': 'all', 'ptId': additional['personalityTypId'] }) }}">
                         All
                     </option>
                     {% for phraseTyp in additional['phraseTyps'] %}
                         <option
-                                value="/phrases/category/{{ additional['categoryId'] }}/phraseTyp/{{ phraseTyp.id }}/personalityTyp/{{ additional['personalityTypId'] }}"
-                        {{ phraseTyp.Id == additional['phraseTypId'] ? 'selected' }}>
+                                value="{{ path('phrase_show_by_filters',{'cId': additional['categoryId'], 'pId': phraseTyp.id, 'ptId': additional['personalityTypId'] }) }}"
+                                {{ phraseTyp.Id == additional['phraseTypId'] ? 'selected' }}>
                             {{ phraseTyp.name }}
                         </option>
                     {% endfor %}
@@ -49,12 +41,12 @@
             <li class="bold table-headline-wrapper">
                 <div>Personality Typ</div>
                 <select onchange="location = this.value">
-                    <option value="/phrases/category/{{ additional['categoryId'] }}/phraseTyp/{{ additional['phraseTypId'] }}/personalityTyp/all">
+                    <option value="{{ path('phrase_show_by_filters',{'cId': additional['categoryId'], 'pId': additional['phraseTypId'], 'ptId': 'all' }) }}">
                         All
                     </option>
                     {% for personalityTyp in additional['personalityTyps'] %}
                         <option
-                                value="/phrases/category/{{ additional['categoryId'] }}/phraseTyp/{{ additional['phraseTypId'] }}/personalityTyp/{{ personalityTyp.Id }}"
+                                value="{{ path('phrase_show_by_filters',{'cId': additional['categoryId'], 'pId': additional['phraseTypId'], 'ptId': personalityTyp.id }) }}"
                                 {{ personalityTyp.Id == additional['personalityTypId'] ? 'selected' }}>
                             {{ personalityTyp.name }}
                         </option>
@@ -69,8 +61,8 @@
                 <li>{{ phrase.phraseTyp.name }}</li>
                 <li>{{ phrase.personalityTyp.name }}</li>
                 <li>
-                    <a href="/phrase/delete/{{ phrase.id }}">Delete</a>
-                    <a href="/phrase/edit/{{ phrase.id }}">Edit</a>
+                    <a href="{{ path('phrase_delete', { 'id': phrase.id }) }}">Delete</a>
+                    <a href="{{ path('phrase_edit', { 'id': phrase.id }) }}">Edit</a>
                 </li>
             {% endfor %}
         </ul>

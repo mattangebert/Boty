@@ -5,7 +5,7 @@
 {% block body %}
     <div class="example-wrapper">
         <h3>PersonalityTyps</h3>
-        <a href="/personalityTyps/new">New PersonalityTyp</a>
+        <a href="{{ path('personalityTyp_create') }}">New PersonalityTyp</a>
         <ul class="table-list">
             <li class="bold">PersonalityTyp Name</li>
             <li></li>
@@ -13,8 +13,9 @@
             {% for personalityTyp in personalityTyps %}
                 <li>{{ personalityTyp.name }}</li>
                 <li>
-                    <a href="/personalityTyp/delete/{{ personalityTyp.id }}">Delete</a>
-                    <a href="/personalityTyp/edit/{{ personalityTyp.id }}">Edit</a>
+                    <a href="{{ path('personalityTyp_delete', { 'id': personalityTyp.id }) }}">Delete</a>
+                    <a href="{{ path('personalityTyp_edit', { 'id': personalityTyp.id }) }}">Edit</a>
+                    <a href="{{ path('phrase_show_by_filters',{'cId': 'all', 'pId': 'all', 'ptId': personalityTyp.id }) }}">View Phrases</a>
                 </li>
             {% endfor %}
         </ul>
