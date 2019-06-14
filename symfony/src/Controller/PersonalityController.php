@@ -3,25 +3,19 @@
 namespace App\Controller;
 
 use App\Entity\Personality;
-use App\Form\PersonalityType;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class PersonalityController extends AbstractController
+class PersonalityController extends BaseController
 {
+    protected $entityName = 'personality';
+
     /**
      * @Route("/personalities", name="personality_show_all")
      */
     public function showAllPersonality()
     {
-        $personalities = $this->getDoctrine()
-            ->getRepository(Personality::class)
-            ->findAll();
-
-        return $this->render('personality/viewAll.html.twig', [
-            'personalities' => $personalities
-        ]);
+        return $this->showAllFromEntity();
     }
 
     /**
@@ -29,13 +23,7 @@ class PersonalityController extends AbstractController
      */
     public function deletePersonality($id)
     {
-        $personality = $this->getPersonalityById($id);
-
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->remove($personality);
-        $entityManager->flush();
-
-        return $this->redirectToRoute('personality_show_all');
+        return $this->deleteEntity($id);
     }
 
     /**
@@ -44,7 +32,7 @@ class PersonalityController extends AbstractController
     public function editPersonality($id, Request $request)
     {
         /** @var Personality $personality */
-        $personality = $this->getPersonalityById($id);
+        $personality = $this->getEntityById($id);
 
         return $this->handleForm($personality, $request);
     }
@@ -57,40 +45,5 @@ class PersonalityController extends AbstractController
         $personality = new Personality();
 
         return $this->handleForm($personality, $request);
-    }
-
-    private function handleForm(Personality $personality, Request $request)
-    {
-        $form = $this->createForm( PersonalityType::class, $personality);
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $personality = $form->getData();
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($personality);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('personality_show_all', ['id' => $personality->getId()]);
-        }
-
-        return $this->render('default/form.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
-
-    private function getPersonalityById($id)
-    {
-        $personality = $this->getDoctrine()
-            ->getRepository(Personality::class)
-            ->find($id);
-
-        if (!$personality) {
-            throw $this->createNotFoundException(
-                'No personality found for id '.$id
-            );
-        }
-
-        return $personality;
     }
 }

@@ -3,25 +3,19 @@
 namespace App\Controller;
 
 use App\Entity\Phrase;
-use App\Form\PhraseType;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class PhraseController extends AbstractController
+class PhraseController extends BaseController
 {
+    protected $entityName = 'phrase';
+
     /**
      * @Route("/phrases", name="phrase_show_all")
      */
     public function showAllPhrase()
     {
-        $phrases = $this->getDoctrine()
-            ->getRepository(Phrase::class)
-            ->findAll();
-
-        return $this->render('phrase/viewAll.html.twig', [
-            'phrases' => $phrases
-        ]);
+        return $this->showAllFromEntity();
     }
 
     /**
@@ -29,13 +23,7 @@ class PhraseController extends AbstractController
      */
     public function deletePhrase($id)
     {
-        $phrase = $this->getPhraseById($id);
-
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->remove($phrase);
-        $entityManager->flush();
-
-        return $this->redirectToRoute('phrase_show_all');
+        return $this->deleteEntity($id);
     }
 
     /**
@@ -43,9 +31,8 @@ class PhraseController extends AbstractController
      */
     public function editPhrase($id, Request $request)
     {
-
         /** @var Phrase $phrase */
-        $phrase = $this->getPhraseById($id);
+        $phrase = $this->getEntityById($id);
 
         return $this->handleForm($phrase, $request);
     }
@@ -58,41 +45,5 @@ class PhraseController extends AbstractController
         $phrase = new Phrase();
 
         return $this->handleForm($phrase, $request);
-    }
-
-    private function handleForm(Phrase $phrase, Request $request)
-    {
-        $form = $this->createForm( PhraseType::class, $phrase);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $phrase = $form->getData();
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($phrase);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('phrase_show_all', ['id' => $phrase->getId()]);
-        }
-
-        return $this->render('default/form.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
-
-    private function getPhraseById($id)
-    {
-        $phrase = $this->getDoctrine()
-            ->getRepository(Phrase::class)
-            ->find($id);
-
-        if (!$phrase) {
-            throw $this->createNotFoundException(
-                'No phrase found for id '.$id
-            );
-        }
-
-        return $phrase;
     }
 }

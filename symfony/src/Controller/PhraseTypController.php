@@ -8,20 +8,16 @@ use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
-class PhraseTypController extends AbstractController
+class PhraseTypController extends BaseController
 {
+    protected $entityName = 'phraseTyp';
+
     /**
      * @Route("/phraseTyps", name="phraseTyp_show_all")
      */
     public function showAllPhraseTyp()
     {
-        $phraseTyps = $this->getDoctrine()
-            ->getRepository(PhraseTyp::class)
-            ->findAll();
-
-        return $this->render('phrase_typ/viewAll.html.twig', [
-            'phraseTyps' => $phraseTyps
-        ]);
+       return $this->showAllFromEntity();
     }
 
     /**
@@ -29,13 +25,7 @@ class PhraseTypController extends AbstractController
      */
     public function deletePhraseTyp($id)
     {
-        $phraseTyp = $this->getPhraseTypById($id);
-
-        $entityManager = $this->getDoctrine()->getManager();
-        $entityManager->remove($phraseTyp);
-        $entityManager->flush();
-
-        return $this->redirectToRoute('phraseTyp_show_all');
+        return $this->deleteEntity($id);
     }
 
     /**
@@ -43,9 +33,8 @@ class PhraseTypController extends AbstractController
      */
     public function editPhraseTyp($id, Request $request)
     {
-
         /** @var PhraseTyp $phraseTyp */
-        $phraseTyp = $this->getPhraseTypById($id);
+        $phraseTyp = $this->getEntityById($id);
 
         return $this->handleForm($phraseTyp, $request);
     }
@@ -58,41 +47,5 @@ class PhraseTypController extends AbstractController
         $phraseTyp = new PhraseTyp();
 
         return $this->handleForm($phraseTyp, $request);
-    }
-
-    private function handleForm(PhraseTyp $phraseTyp, Request $request)
-    {
-        $form = $this->createForm( PhraseTypType::class, $phraseTyp);
-
-        $form->handleRequest($request);
-
-        if ($form->isSubmitted() && $form->isValid()) {
-            $phraseTyp = $form->getData();
-
-            $entityManager = $this->getDoctrine()->getManager();
-            $entityManager->persist($phraseTyp);
-            $entityManager->flush();
-
-            return $this->redirectToRoute('phraseTyp_show_all', ['id' => $phraseTyp->getId()]);
-        }
-
-        return $this->render('default/form.html.twig', [
-            'form' => $form->createView(),
-        ]);
-    }
-
-    private function getPhraseTypById($id)
-    {
-        $phraseTyp = $this->getDoctrine()
-            ->getRepository(PhraseTyp::class)
-            ->find($id);
-
-        if (!$phraseTyp) {
-            throw $this->createNotFoundException(
-                'No phraseTyp found for id '.$id
-            );
-        }
-
-        return $phraseTyp;
     }
 }

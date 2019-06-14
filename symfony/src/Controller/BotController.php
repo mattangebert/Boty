@@ -3,19 +3,19 @@
 namespace App\Controller;
 
 use App\Entity\Bot;
-use App\Form\BotType;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
 class BotController extends BaseController
 {
+    protected $entityName = 'bot';
+
     /**
      * @Route("/bots", name="bot_show_all")
      */
     public function showAllBot()
     {
-        return $this->showAllFromEntity('bot');
+        return $this->showAllFromEntity();
     }
 
     /**
@@ -23,7 +23,7 @@ class BotController extends BaseController
      */
     public function deleteBot($id)
     {
-       return $this->deleteEntity('bot', $id);
+       return $this->deleteEntity($id);
     }
 
     /**
@@ -31,11 +31,10 @@ class BotController extends BaseController
      */
     public function editBot($id, Request $request)
     {
-
         /** @var Bot $bot */
-        $bot = $this->getBotById($id);
+        $bot = $this->getEntityById($id);
 
-        return $this->handleForm('bot',$bot, $request);
+        return $this->handleForm($bot, $request);
     }
 
     /**
@@ -45,6 +44,6 @@ class BotController extends BaseController
     {
         $bot = new Bot();
 
-        return $this->handleForm('bot',$bot, $request);
+        return $this->handleForm($bot, $request);
     }
 }
