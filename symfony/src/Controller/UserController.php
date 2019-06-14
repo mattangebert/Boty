@@ -17,12 +17,7 @@ class UserController extends BaseController
      */
     public function showUser($id)
     {
-       $user = $this->getEntityById($id);
-
-        return $this->render('user/view.html.twig', [
-            'user' => $user
-        ]);
-
+       return $this->showEntity($id);
     }
 
     /**

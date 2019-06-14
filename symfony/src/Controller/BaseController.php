@@ -16,7 +16,6 @@ use App\Form\PersonalityTypType;
 use App\Form\PhraseType;
 use App\Form\PhraseTypType;
 use App\Form\UserType;
-use function PHPSTORM_META\type;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -48,26 +47,29 @@ class BaseController extends AbstractController
 
     protected function showAllFromEntity()
     {
-        $entity = $this->getDoctrine()
+        $entities = $this->getDoctrine()
             ->getRepository($this->entityTypes[$this->entityName])
             ->findAll();
 
-        $collectionName = $this->entityName . 's';
-
-        if ($this->endsWith($this->entityName, 'y')) {
-            $collectionName = substr($this->entityName, 0, -1) . 'ies';
-        }
+        $collectionName = $this->getCollectionName();
 
         $folderName = $this->getFolderPath();
 
         return $this->render($folderName.'/viewAll.html.twig', [
-            $collectionName => $entity
+            $collectionName => $entities
         ]);
     }
 
-    // todo get mulible
+    protected function showEntity($id)
+    {
+        $entity = $this->getEntityById($id);
 
-    //todo get single
+        $folderName = $this->getFolderPath();
+
+        return $this->render($folderName.'/view.html.twig', [
+            $this->entityName => $entity
+        ]);
+    }
 
     protected function deleteEntity($id)
     {
@@ -119,6 +121,17 @@ class BaseController extends AbstractController
     private function getFolderPath()
     {
         return preg_replace_callback('/([A-Z])/', function($m) { return '_'.strtolower($m[0]); }, $this->entityName);
+    }
+
+    private function getCollectionName()
+    {
+        $collectionName = $this->entityName . 's';
+
+        if ($this->endsWith($this->entityName, 'y')) {
+            $collectionName = substr($this->entityName, 0, -1) . 'ies';
+        }
+
+        return $collectionName;
     }
 
     protected function getEntityById($id)
