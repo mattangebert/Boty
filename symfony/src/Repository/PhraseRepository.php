@@ -41,7 +41,6 @@ class PhraseRepository extends ServiceEntityRepository
 
 
         return $qb->getQuery()->getResult();
-
     }
 
     // /**

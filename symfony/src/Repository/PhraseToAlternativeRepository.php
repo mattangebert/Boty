@@ -19,6 +19,16 @@ class PhraseToAlternativeRepository extends ServiceEntityRepository
         parent::__construct($registry, PhraseToAlternative::class);
     }
 
+    public function findOneByIds($pId, $apId)
+    {
+        $qb = $this->createQueryBuilder('pta')
+        ->andWhere('pta.phrase = :pId')
+        ->setParameter('pId', $pId)
+        ->andWhere('pta.alternativePhrase = :apId')
+        ->setParameter('apId', $apId)
+        ->getQuery()->getOneOrNullResult();
+    }
+
     // /**
     //  * @return PhraseToAlternative[] Returns an array of PhraseToAlternative objects
     //  */

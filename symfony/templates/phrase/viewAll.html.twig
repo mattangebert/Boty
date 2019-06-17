@@ -63,6 +63,9 @@
                 <li>
                     <a href="{{ path('phrase_delete', { 'id': phrase.id }) }}">Delete</a>
                     <a href="{{ path('phrase_edit', { 'id': phrase.id }) }}">Edit</a>
+                    <a href="{{ path('phrase_add_alternative', {'id': phrase.id }) }}">Add Alternative</a>
+                    <a href="{{ path('phrase_show_alternatives', {'id': phrase.id }) }}">Show Alternatives</a>
+
                 </li>
             {% endfor %}
         </ul>

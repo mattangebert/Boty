@@ -17,16 +17,16 @@ class PhraseToAlternative
     private $id;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Phrase", inversedBy="alternativePhrases")
-     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
-     */
-    private $Phrase;
-
-    /**
      * @ORM\ManyToOne(targetEntity="App\Entity\Phrase")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
-    private $AlternativePhrase;
+    private $phrase;
+
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Phrase", inversedBy="alternativePhrases")
+     * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
+     */
+    private $alternativePhrase;
 
     public function getId(): ?int
     {
@@ -35,24 +35,24 @@ class PhraseToAlternative
 
     public function getPhrase(): ?Phrase
     {
-        return $this->Phrase;
+        return $this->phrase;
     }
 
-    public function setPhrase(?Phrase $Phrase): self
+    public function setPhrase(?Phrase $phrase): self
     {
-        $this->Phrase = $Phrase;
+        $this->phrase = $phrase;
 
         return $this;
     }
 
     public function getAlternativePhrase(): ?Phrase
     {
-        return $this->AlternativePhrase;
+        return $this->alternativePhrase;
     }
 
-    public function setAlternativePhrase(?Phrase $AlternativePhrase): self
+    public function setAlternativePhrase(?Phrase $alternativePhrase): self
     {
-        $this->AlternativePhrase = $AlternativePhrase;
+        $this->alternativePhrase = $alternativePhrase;
 
         return $this;
     }

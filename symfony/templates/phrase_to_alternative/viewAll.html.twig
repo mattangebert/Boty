@@ -1,0 +1,43 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Hello UserController!{% endblock %}
+
+{% block body %}
+    <div class="example-wrapper">
+        <h3>{{ title }}</h3>
+{#        <a href="{{ path('phraseToAlternative_create')}}">New PhraseToAlternative</a>#}
+        <ul class="table-list table-list-5">
+            <li class="bold">
+                <div>Phrase</div>
+                <select onchange="location = this.value">
+                    <option value="{{ path('phrase_show_alternatives',{'id': 'all' }) }}">
+                        All
+                    </option>
+                    {% for phrase in additional['phrases'] %}
+                        <option
+                                value="{{ path('phrase_show_alternatives',{'id': phrase.id }) }}"
+                                {{ phrase.id == additional['currentPhraseId'] ? 'selected' }} >
+                            {{ phrase.phrase }}
+                        </option>
+                    {% endfor %}
+                </select>
+            </li>
+            <li class="bold">Phrase Personality</li>
+            <li class="bold">Alternative</li>
+            <li class="bold">Alternative Personality</li>
+            <li></li>
+
+            {% for phraseToAlternative in phraseToAlternatives %}
+                <li>
+                    {{ phraseToAlternative.phrase.phrase }}
+                </li>
+                <li>{{ phraseToAlternative.phrase.personalityTyp.name }}</li>
+                <li>{{ phraseToAlternative.alternativePhrase.phrase }}</li>
+                <li>{{ phraseToAlternative.alternativePhrase.personalityTyp.name }}</li>
+                <li>
+                    <a href="{{ path('phraseToAlternative_delete', { 'id': phraseToAlternative.id }) }}">Delete</a>
+                </li>
+            {% endfor %}
+        </ul>
+    </div>
+{% endblock %}

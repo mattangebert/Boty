@@ -42,7 +42,7 @@ class Phrase
     private $category;
 
     /**
-     * @ORM\OneToMany(targetEntity="App\Entity\PhraseToAlternative", mappedBy="Phrase")
+     * @ORM\OneToMany(targetEntity="App\Entity\PhraseToAlternative", mappedBy="phrase")
      */
     private $alternativePhrases;
 
