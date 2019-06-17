@@ -8,6 +8,7 @@ use App\Entity\Personality;
 use App\Entity\PersonalityTyp;
 use App\Entity\Phrase;
 use App\Entity\PhraseToAlternative;
+use App\Entity\PhraseToReply;
 use App\Entity\PhraseTyp;
 use App\Entity\User;
 use App\Form\BotType;
@@ -15,6 +16,7 @@ use App\Form\CategoryType;
 use App\Form\PersonalityType;
 use App\Form\PersonalityTypType;
 use App\Form\PhraseToAlternativeType;
+use App\Form\PhraseToReplyType;
 use App\Form\PhraseType;
 use App\Form\PhraseTypType;
 use App\Form\UserType;
@@ -33,6 +35,7 @@ class BaseController extends AbstractController
         'phrase' => Phrase::class,
         'phraseTyp' => PhraseTyp::class,
         'phraseToAlternative' => PhraseToAlternative::class,
+        'phraseToReply' => PhraseToReply::class,
         'user' => User::class
     ];
 
@@ -44,6 +47,7 @@ class BaseController extends AbstractController
         'phrase' => PhraseType::class,
         'phraseTyp' => PhraseTypType::class,
         'phraseToAlternative' => PhraseToAlternativeType::class,
+        'phraseToReply' => PhraseToReplyType::class,
         'user' => UserType::class
     ];
 

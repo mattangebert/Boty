@@ -51,6 +51,14 @@ class PhraseRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
+    public function findAllWithReplies()
+    {
+        return $this->createQueryBuilder('p')
+            ->select('p')
+            ->innerJoin('App:phraseToReply', 'ptr', 'WITH', 'ptr.phrase = p.id')
+            ->getQuery()->getResult();
+    }
+
     // /**
     //  * @return Phrase[] Returns an array of Phrase objects
     //  */

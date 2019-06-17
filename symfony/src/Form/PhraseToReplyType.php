@@ -2,8 +2,8 @@
 
 namespace App\Form;
 
-use App\Entity\PhraseToAlternative;
 use App\Entity\Phrase;
+use App\Entity\PhraseToReply;
 use Doctrine\ORM\EntityRepository;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
@@ -11,12 +11,19 @@ use Symfony\Component\Form\Extension\Core\Type\SubmitType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class PhraseToAlternativeType extends AbstractType
+class PhraseToReplyType extends AbstractType
 {
     private $builder;
 
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
+        $builder
+            ->add('phrase')
+            ->add('replyPhrase')
+            ->add('save', SubmitType::class)
+        ;
+
+
         $this->builder = $builder;
 
         $this->builder
@@ -28,10 +35,11 @@ class PhraseToAlternativeType extends AbstractType
 
 
         $this->builder
-            ->add('alternativePhrase', EntityType::class, [
+            ->add('replyPhrase', EntityType::class, [
                 'class' => Phrase::class,
                 'query_builder' => function(EntityRepository $er) {
                     return $er->createQueryBuilder('p')
+
                         ->andWhere('p.id != :current')
                         ->setParameter('current', $this->builder->getData()->getPhrase()->getId());
                 },
@@ -39,13 +47,12 @@ class PhraseToAlternativeType extends AbstractType
             ])
             ->add('save', SubmitType::class)
         ;
-
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => PhraseToAlternative::class,
+            'data_class' => PhraseToReply::class,
         ]);
     }
 }

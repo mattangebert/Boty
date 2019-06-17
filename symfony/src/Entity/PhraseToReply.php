@@ -20,13 +20,13 @@ class PhraseToReply
      * @ORM\ManyToOne(targetEntity="App\Entity\Phrase")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
-    private $Phrase;
+    private $phrase;
 
     /**
-     * @ORM\ManyToOne(targetEntity="App\Entity\Phrase")
+     * @ORM\ManyToOne(targetEntity="App\Entity\Phrase", inversedBy="replyPhrases")
      * @ORM\JoinColumn(nullable=false, onDelete="CASCADE")
      */
-    private $ReplyPhrase;
+    private $replyPhrase;
 
     public function getId(): ?int
     {
@@ -35,24 +35,24 @@ class PhraseToReply
 
     public function getPhrase(): ?Phrase
     {
-        return $this->Phrase;
+        return $this->phrase;
     }
 
-    public function setPhrase(?Phrase $Phrase): self
+    public function setPhrase(?Phrase $phrase): self
     {
-        $this->Phrase = $Phrase;
+        $this->phrase = $phrase;
 
         return $this;
     }
 
     public function getReplyPhrase(): ?Phrase
     {
-        return $this->ReplyPhrase;
+        return $this->replyPhrase;
     }
 
-    public function setReplyPhrase(?Phrase $ReplyPhrase): self
+    public function setReplyPhrase(?Phrase $replyPhrase): self
     {
-        $this->ReplyPhrase = $ReplyPhrase;
+        $this->replyPhrase = $replyPhrase;
 
         return $this;
     }

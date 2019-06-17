@@ -21,7 +21,7 @@ class PhraseToAlternativeRepository extends ServiceEntityRepository
 
     public function findOneByIds($pId, $apId)
     {
-        $qb = $this->createQueryBuilder('pta')
+        return $this->createQueryBuilder('pta')
         ->andWhere('pta.phrase = :pId')
         ->setParameter('pId', $pId)
         ->andWhere('pta.alternativePhrase = :apId')

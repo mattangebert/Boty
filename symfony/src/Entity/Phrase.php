@@ -46,6 +46,11 @@ class Phrase
      */
     private $alternativePhrases;
 
+    /**
+     * @ORM\OneToMany(targetEntity="App\Entity\PhraseToReply", mappedBy="phrase")
+     */
+    private $replyPhrases;
+
     public function __construct()
     {
         $this->alternativePhrases = new ArrayCollection();
@@ -129,6 +134,37 @@ class Phrase
             // set the owning side to null (unless already changed)
             if ($alternativePhrase->getPhrase() === $this) {
                 $alternativePhrase->setPhrase(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PhraseToReply[]
+     */
+    public function getReplyPhrases(): Collection
+    {
+        return $this->replyPhrases;
+    }
+
+    public function addReplyPhrase(PhraseToAlternative $replyPhrase): self
+    {
+        if (!$this->replyPhrases->contains($replyPhrase)) {
+            $this->replyPhrases[] = $replyPhrase;
+            $replyPhrase->setPhrase($this);
+        }
+
+        return $this;
+    }
+
+    public function removeReplyPhrase(PhraseToAlternative $replyPhrase): self
+    {
+        if ($this->replyPhrases->contains($replyPhrase)) {
+            $this->replyPhrases->removeElement($replyPhrase);
+            // set the owning side to null (unless already changed)
+            if ($replyPhrase->getPhrase() === $this) {
+                $replyPhrase->setPhrase(null);
             }
         }
 

@@ -19,6 +19,16 @@ class PhraseToReplyRepository extends ServiceEntityRepository
         parent::__construct($registry, PhraseToReply::class);
     }
 
+    public function findOneByIds($pId, $rpId)
+    {
+        return $this->createQueryBuilder('ptr')
+            ->andWhere('ptr.phrase = :pId')
+            ->setParameter('pId', $pId)
+            ->andWhere('ptr.replyPhrase = :rpId')
+            ->setParameter('rpId', $rpId)
+            ->getQuery()->getOneOrNullResult();
+    }
+
     // /**
     //  * @return PhraseToReply[] Returns an array of PhraseToReply objects
     //  */

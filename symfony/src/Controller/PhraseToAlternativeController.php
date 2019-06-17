@@ -5,6 +5,7 @@ namespace App\Controller;
 use App\Entity\Phrase;
 use App\Entity\PhraseToAlternative;
 use App\Form\PhraseToAlternativeType;
+use Symfony\Component\Form\FormError;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
 
@@ -79,7 +80,10 @@ class PhraseToAlternativeController extends BaseController
                 ->findOneByIds($id, $form->getData()->getAlternativePhrase()->getId());
 
             if (null !== $relation) {
-                return null;
+                $form->addError(new FormError('Alternative already Exist'));
+                return $this->render('default/form.html.twig', [
+                    'form' => $form->createView(),
+                ]);
             }
 
             // get data from Form
