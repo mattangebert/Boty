@@ -43,6 +43,14 @@ class PhraseRepository extends ServiceEntityRepository
         return $qb->getQuery()->getResult();
     }
 
+    public function findAllWithAlternatives()
+    {
+        return $this->createQueryBuilder('p')
+            ->select('p')
+            ->innerJoin('App:phraseToAlternative', 'pta', 'WITH', 'pta.phrase = p.id')
+            ->getQuery()->getResult();
+    }
+
     // /**
     //  * @return Phrase[] Returns an array of Phrase objects
     //  */

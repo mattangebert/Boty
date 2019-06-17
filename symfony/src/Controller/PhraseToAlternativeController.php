@@ -17,7 +17,7 @@ class PhraseToAlternativeController extends BaseController
      */
     public function showAllAlternative()
     {
-        $phrases = $this->getAllFromEntity('phrase');
+        $phrases = $this->getDoctrine()->getRepository(Phrase::class)->findAllWithAlternatives();
 
         $additional = [
             'phrases' => $phrases,
@@ -36,7 +36,7 @@ class PhraseToAlternativeController extends BaseController
         /** @var Phrase $phrase */
         $phrase = $this->getEntityById($id, 'phrase');
         $alternatives = array();
-        $phrases = $this->getAllFromEntity('phrase');
+        $phrases = $this->getDoctrine()->getRepository(Phrase::class)->findAllWithAlternatives();
 
         $additional = [
             'phrases' => $phrases,
