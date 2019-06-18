@@ -45,6 +45,11 @@ class User implements UserInterface
      */
     private $gender;
 
+    /**
+     * @ORM\Column(type="simple_array", nullable=true)
+     */
+    private $conversation = [];
+
     public function getId(): ?int
     {
         return $this->id;
@@ -143,6 +148,18 @@ class User implements UserInterface
     public function setGender(?string $gender): self
     {
         $this->gender = $gender;
+
+        return $this;
+    }
+
+    public function getConversation(): ?array
+    {
+        return $this->conversation;
+    }
+
+    public function setConversation(?array $conversation): self
+    {
+        $this->conversation = $conversation;
 
         return $this;
     }

@@ -9,12 +9,18 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ controller_name }}! ✅</h1>
+    <h1>Hello {{ userName }}! ✅</h1>
 
-    This friendly message is coming from:
-    <ul>
-        <li>Your controller at <code><a href="{{ '/var/www/html/src/Controller/BaseController.php'|file_link(0) }}">src/Controller/BaseController.php</a></code></li>
-        <li>Your template at <code><a href="{{ '/var/www/html/templates/base/index.html.twig'|file_link(0) }}">templates/base/index.html.twig</a></code></li>
-    </ul>
+    <span>Please Select a Bot</span>
+    <div> {{ form(form) }}</div>
+    <div>
+       <form action="{{ path('clearConversation') }}">
+           <button type="submit">Clear Conversation</button>
+       </form>
+        {% for oldPhrase in history %}
+            <p>{{ oldPhrase }}</p>
+        {% endfor %}
+        <p>{{ phrase }}</p>
+    </div>
 </div>
 {% endblock %}

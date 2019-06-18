@@ -4,6 +4,8 @@ namespace App\Repository;
 
 use App\Entity\Phrase;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\QueryBuilder;
+use PhpParser\Node\Expr\Array_;
 use Symfony\Bridge\Doctrine\RegistryInterface;
 
 /**
@@ -24,20 +26,18 @@ class PhraseRepository extends ServiceEntityRepository
     {
         $qb = $this->createQueryBuilder('p');
 
-        if (is_numeric($cId)) {
-            $qb->andWhere('p.category = :cId');
-            $qb->setParameter('cId', $cId);
-        }
+        $qb = $this->addFilters($qb, $cId, $pId, $ptId);
 
-        if (is_numeric($pId)) {
-            $qb->andWhere('p.phraseTyp = :pId');
-            $qb->setParameter('pId', $pId);
-        }
+        return $qb->getQuery()->getResult();
+    }
 
-        if (is_numeric($ptId)) {
-            $qb->andWhere('p.personalityTyp = :ptId');
-            $qb->setParameter('ptId', $ptId);
-        }
+    public function findByFilters2($cId, $pId, $ptId)
+    {
+        $qb = $this->createQueryBuilder('p');
+
+        $qb->select('p.id');
+
+        $qb = $this->addFilters($qb, $cId, $pId, $ptId);
 
 
         return $qb->getQuery()->getResult();
@@ -59,32 +59,47 @@ class PhraseRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
-    // /**
-    //  * @return Phrase[] Returns an array of Phrase objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function countPhrases($cId = '', $pId = '', $ptId = '')
     {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('p.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
+        $qb = $this->createQueryBuilder('p');
+        $qb->select('count(p.id)');
 
-    /*
-    public function findOneBySomeField($value): ?Phrase
-    {
-        return $this->createQueryBuilder('p')
-            ->andWhere('p.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        $qb = $this->addFilters($qb, $cId, $pId, $ptId);
+
+        return $qb->getQuery()->getSingleScalarResult();
+
     }
-    */
+
+    public function findRandomPhrase($cId, $pId, $ptId, Array $random_ids, int $max = 1)
+    {
+        $qb = $this->createQueryBuilder('p');
+
+        $qb = $this->addFilters($qb, $cId, $pId, $ptId);
+
+        $qb->andWhere('p.id IN (:ids)');
+        $qb->setParameter('ids', $random_ids);
+        $qb->setMaxResults($max);
+
+        return $qb->getQuery()->getResult();
+    }
+
+    private function addFilters(QueryBuilder $qb, $cId, $pId, $ptId)
+    {
+        if (is_numeric($cId)) {
+            $qb->andWhere('p.category = :cId');
+            $qb->setParameter('cId', $cId);
+        }
+
+        if (is_numeric($pId)) {
+            $qb->andWhere('p.phraseTyp = :pId');
+            $qb->setParameter('pId', $pId);
+        }
+
+        if (is_numeric($ptId)) {
+            $qb->andWhere('p.personalityTyp = :ptId');
+            $qb->setParameter('ptId', $ptId);
+        }
+
+        return $qb;
+    }
 }
