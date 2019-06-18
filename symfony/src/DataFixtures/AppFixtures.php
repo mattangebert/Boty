@@ -38,7 +38,8 @@ class AppFixtures extends Fixture
         'Answer',
         'Statement',
         'Opinion',
-        'Insult'
+        'Insult',
+        'Greeting'
 
     );
 
@@ -299,13 +300,85 @@ class AppFixtures extends Fixture
             $p002p = new PhraseDummy('NoNoNoNoNoNo', 'Default', 'Answer', 'Crazy'),
             $p002q = new PhraseDummy( 'My body says yes, but my heart says No', 'Default', 'Answer', 'Flowery'),
             $p002r = new PhraseDummy( 'N to the O.', 'Default', 'Answer', 'Flowery', 1),
+
+            $p003 =  new PhraseDummy('How are you', 'Default', 'Greeting', 'Normal'),
+            $p003a =  new PhraseDummy('Hey Hey', 'Default', 'Greeting', 'Informal'),
+            $p003b =  new PhraseDummy('What\'s up', 'Default', 'Greeting', 'Informal'),
+            $p003c =  new PhraseDummy('Good to see you', 'Default', 'Greeting', 'Normal'),
+            $p003d =  new PhraseDummy('Nice to see you', 'Default', 'Greeting', 'Formal'),
+            $p003e =  new PhraseDummy('Long time no see', 'Default', 'Greeting', 'Normal'),
+            $p003f =  new PhraseDummy('It\'s been a while', 'Default', 'Greeting', 'Informal'),
+            $p003g =  new PhraseDummy('Good morning', 'Default', 'Greeting', 'Formal'),
+            $p003h =  new PhraseDummy('Pleased to meet you', 'Default', 'Greeting', 'Formal'),
+            $p003i =  new PhraseDummy('Yo', 'Default', 'Greeting', 'Informal'),
+            $p003j =  new PhraseDummy('Whazzup?', 'Default', 'Greeting', 'Crazy'),
+            $p003k =  new PhraseDummy(' G’day mate', 'Default', 'Greeting', 'Flowery'),
+            $p003l =  new PhraseDummy('Wish you a horrible day', 'Default', 'Greeting', 'Mean'),
+            $p003m =  new PhraseDummy('Why are you here?', 'Default', 'Greeting', 'Mean'),
+            $p003n =  new PhraseDummy('Fucking Asshole', 'Default', 'Greeting', 'Mean'),
+            $p003o =  new PhraseDummy('Holy Cow', 'Default', 'Greeting', 'Vegan'),
+            $p003p =  new PhraseDummy('Happy Vegan Day', 'Default', 'Greeting', 'Vegan'),
+            $p003q =  new PhraseDummy('A wonderfull day to you', 'Default', 'Greeting', 'Flowery'),
+            $p003r =  new PhraseDummy('Whalalalalaala', 'Default', 'Greeting', 'Crazy'),
+            $p003s =  new PhraseDummy('Hello', 'Default', 'Greeting', 'Normal', 1),
+
+            $p004 =  new PhraseDummy('How are you?', 'Default', 'Question', 'Normal'),
+            $p004a =  new PhraseDummy('How are you doing?', 'Default', 'Question', 'Normal'),
+            $p004b =  new PhraseDummy('How do you do?', 'Default', 'Question', 'Informal'),
+            $p004c =  new PhraseDummy('How\'s everything?', 'Default', 'Question', 'Informal'),
+            $p004d =  new PhraseDummy('Hope you\'re feeling well today?', 'Default', 'Question', 'Flowery'),
+            $p004e =  new PhraseDummy('How do you do?', 'Default', 'Question', 'Formal'),
+            $p004f =  new PhraseDummy('Feeling well?', 'Default', 'Question', 'Informal'),
+            $p004g =  new PhraseDummy('Hope you\'re feeling bad', 'Default', 'Question', 'Mean'),
+            $p004h =  new PhraseDummy('I don\'t care how you are', 'Default', 'Question', 'Mean'),
+            $p004i =  new PhraseDummy('Do you feel bad?, I don\'t give a *', 'Default', 'Question', 'Mean'),
+            $p004j =  new PhraseDummy('Did you have a pleasant day?', 'Default', 'Question', 'Flowery'),
+            $p004k =  new PhraseDummy('How\'s the Duck in the oven?', 'Default', 'Question', 'Crazy'),
+            $p004l =  new PhraseDummy('Muhahaha *Evil laugh cough cough* mh how are you?', 'Default', 'Question', 'Crazy'),
+            $p004m =  new PhraseDummy('I\'m Vegan, how are you?', 'Default', 'Question', 'Vegan'),
+            $p004n =  new PhraseDummy('How\'s your day?', 'Default', 'Question', 'Vegan', 1),
+
+            $p005 =  new PhraseDummy('Good', 'Default', 'Answer', 'Normal'),
+            $p005a =  new PhraseDummy('Acceptable', 'Default', 'Answer', 'Mean'),
+            $p005b =  new PhraseDummy('Excellent', 'Default', 'Answer', 'Formal'),
+            $p005c =  new PhraseDummy('Awesome', 'Default', 'Answer', 'Informal'),
+            $p005d =  new PhraseDummy('Great', 'Default', 'Answer', 'Normal'),
+            $p005e =  new PhraseDummy('Favorable', 'Default', 'Answer', 'Flowery'),
+            $p005f =  new PhraseDummy('Marvelous', 'Default', 'Answer', 'Flowery'),
+            $p005g =  new PhraseDummy('Wonderful', 'Default', 'Answer', 'Vegan'),
+            $p005h =  new PhraseDummy('Well', 'Default', 'Answer', 'Formal'),
+            $p005i =  new PhraseDummy('Satisfactory', 'Default', 'Answer', 'Vegan'),
+            $p005j =  new PhraseDummy('Super', 'Default', 'Answer', 'Informal'),
+            $p005k =  new PhraseDummy('Prime', 'Default', 'Answer', 'Flowery'),
+            $p005l =  new PhraseDummy('Superior', 'Default', 'Answer', 'Mean'),
+            $p005m =  new PhraseDummy('Up to snuff', 'Default', 'Answer', 'Crazy'),
+            $p005n =  new PhraseDummy('Worthy', 'Default', 'Answer', 'Crazy'),
+            $p005o =  new PhraseDummy('Wuff Wuff', 'Default', 'Answer', 'Crazy'),
+            $p005p =  new PhraseDummy('Woaw', 'Default', 'Answer', 'Vegan', 1),
+
+            $p006 =  new PhraseDummy('Bad', 'Default', 'Answer', 'Normal'),
+            $p006a =  new PhraseDummy('Ok', 'Default', 'Answer', 'Formal'),
+            $p006b =  new PhraseDummy('Awful', 'Default', 'Answer', 'Informal'),
+            $p006c =  new PhraseDummy('Atrocious', 'Default', 'Answer', 'Informal'),
+            $p006d =  new PhraseDummy('Not Good', 'Default', 'Answer', 'Normal'),
+            $p006e =  new PhraseDummy('Lousy', 'Default', 'Answer', 'Informal'),
+            $p006f =  new PhraseDummy('Rough', 'Default', 'Answer', 'Formal'),
+            $p006g =  new PhraseDummy('Bottom out', 'Default', 'Answer', 'Flowery'),
+            $p006h =  new PhraseDummy('Inadequate', 'Default', 'Answer', 'Formal'),
+            $p006i =  new PhraseDummy('Abominable', 'Default', 'Answer', 'Flowery'),
+            $p006j =  new PhraseDummy('None of your business', 'Default', 'Answer', 'Mean'),
+            $p006k =  new PhraseDummy('Better then you', 'Default', 'Answer', 'Mean'),
+            $p006l =  new PhraseDummy('Imperfect', 'Default', 'Answer', 'Mean'),
+            $p006m =  new PhraseDummy('Garbage', 'Default', 'Answer', 'Vegan'),
+            $p006n =  new PhraseDummy('Bummer', 'Default', 'Answer', 'Vegan'),
+            $p006o =  new PhraseDummy('Grrr', 'Default', 'Answer', 'Crazy'),
+            $p006p =  new PhraseDummy('Hisssss', 'Default', 'Answer', 'Crazy', 1),
+
         );
 
         $index = 0;
         foreach ($phrases as $key => $phrase) {
             /** @var PhraseDummy $phrase */
-
-
             $p = new Phrase();
             $p->setPhrase($phrase->getPhrase());
             /** @var Category $category */
@@ -322,20 +395,16 @@ class AppFixtures extends Fixture
             $this->addReference('phrase-'.$key, $p);
 
             if($phrase->getIndex() === 1) {
-                for ($i = $index; $i < $key; $i++) {
-                    $pta = new PhraseToAlternative();
-                    $pta->setPhrase($p);
-                    $phraseAlt = $this->getReference('phrase-'.$i);
-                    $pta->setAlternativePhrase($phraseAlt);
+                for ($i = $index; $i <= $key; $i++) {
+                    $p1 = $this->getReference('phrase-'.$i);
 
-                    $pta2 =  new PhraseToAlternative();
-                    $pta2->setAlternativePhrase($p);
-                    $phraseAlt = $this->getReference('phrase-'.$i);
-                    $pta2->setPhrase($phraseAlt);
-
-                    $manager->persist($pta);
-                    $manager->persist($pta2);
+                    for($j = $i +  1; $j <= $key; $j++) {
+                        $p2 = $this->getReference('phrase-'.$j);
+                        $pta = $this->addNewAlternativeFixture($p1, $p2, $manager);
+                        $pta2 = $this->addNewAlternativeFixture($p2, $p1, $manager);
+                    }
                 }
+
                 $index = $key + 1;
             }
         }
@@ -363,8 +432,8 @@ class AppFixtures extends Fixture
         'Answer',
         'Statement',
         'Opinion',
-        'Insult'
-
+        'Insult',
+        'Greeting'
         );
 
         $personalityTyps = array(
@@ -376,6 +445,16 @@ class AppFixtures extends Fixture
         'Crazy',
         'Vegan'
         );
+    }
+
+    private function addNewAlternativeFixture($phrase, $alternativePhrase, ObjectManager $manager)
+    {
+            $pta = new PhraseToAlternative();
+            $pta->setPhrase($phrase);
+            $pta->setAlternativePhrase($alternativePhrase);
+
+            $manager->persist($pta);
+            return $pta;
     }
 
 
