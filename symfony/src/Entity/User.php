@@ -46,7 +46,7 @@ class User implements UserInterface
     private $gender;
 
     /**
-     * @ORM\Column(type="simple_array", nullable=true)
+     * @ORM\Column(type="array", nullable=true)
      */
     private $conversation = [];
 

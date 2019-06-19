@@ -21,24 +21,11 @@ class PhraseRepository extends ServiceEntityRepository
         parent::__construct($registry, Phrase::class);
     }
 
-
     public function findByFilters($cId, $pId, $ptId)
     {
         $qb = $this->createQueryBuilder('p');
 
         $qb = $this->addFilters($qb, $cId, $pId, $ptId);
-
-        return $qb->getQuery()->getResult();
-    }
-
-    public function findByFilters2($cId, $pId, $ptId)
-    {
-        $qb = $this->createQueryBuilder('p');
-
-        $qb->select('p.id');
-
-        $qb = $this->addFilters($qb, $cId, $pId, $ptId);
-
 
         return $qb->getQuery()->getResult();
     }
@@ -59,45 +46,43 @@ class PhraseRepository extends ServiceEntityRepository
             ->getQuery()->getResult();
     }
 
-    public function countPhrases($cId = '', $pId = '', $ptId = '')
+    public function findAllRepliesByFilters($phraseId, $cId, $pId, $ptId)
     {
         $qb = $this->createQueryBuilder('p');
-        $qb->select('count(p.id)');
-
-        $qb = $this->addFilters($qb, $cId, $pId, $ptId);
-
-        return $qb->getQuery()->getSingleScalarResult();
-
-    }
-
-    public function findRandomPhrase($cId, $pId, $ptId, Array $random_ids, int $max = 1)
-    {
-        $qb = $this->createQueryBuilder('p');
-
-        $qb = $this->addFilters($qb, $cId, $pId, $ptId);
-
-        $qb->andWhere('p.id IN (:ids)');
-        $qb->setParameter('ids', $random_ids);
-        $qb->setMaxResults($max);
+        $qb->select('r');
+        $qb->andWhere('p.id = :phraseId');
+        $qb->setParameter('phraseId', $phraseId);
+        $qb->innerJoin('App:phraseToReply', 'ptr', 'WITH', 'ptr.phrase = p.id');
+        $qb->innerJoin('App:phrase', 'r', 'WITH', 'ptr.replyPhrase = r.id');
+        $qb = $this->addFilters($qb, $cId, $pId, $ptId, 'r');
 
         return $qb->getQuery()->getResult();
     }
 
-    private function addFilters(QueryBuilder $qb, $cId, $pId, $ptId)
+    private function addFilters(QueryBuilder $qb, $cId, $pId, $ptId, $alias = 'p')
     {
         if (is_numeric($cId)) {
-            $qb->andWhere('p.category = :cId');
-            $qb->setParameter('cId', $cId);
+            $cId = array($cId);
         }
 
         if (is_numeric($pId)) {
-            $qb->andWhere('p.phraseTyp = :pId');
-            $qb->setParameter('pId', $pId);
+            $pId = array($pId);
         }
 
         if (is_numeric($ptId)) {
-            $qb->andWhere('p.personalityTyp = :ptId');
-            $qb->setParameter('ptId', $ptId);
+            $ptId = array($ptId);
+        }
+
+        if (!empty($cId)) {
+            $qb->andWhere($qb->expr()->in($alias. '.category', $cId));
+        }
+
+        if (!empty($pId)) {
+            $qb->andWhere($qb->expr()->in($alias. '.phraseTyp', $pId));
+        }
+
+        if (!empty($ptId)) {
+            $qb->andWhere($qb->expr()->in($alias. '.personalityTyp', $ptId));
         }
 
         return $qb;
