@@ -9,10 +9,12 @@
 </style>
 
 <div class="example-wrapper">
-    <h1>Hello {{ userName }}! ✅</h1>
+    <h3>Hello {{ userName }}</h3>
 
-    <span>Please Select a Bot</span>
-    <div> {{ form(form) }}</div>
+    <span>Wanna Talk?</span>
+    <div>
+        {{ form(form) }}
+    </div>
     <div>
        <form action="{{ path('clearConversation') }}">
            <button type="submit">Clear Conversation</button>

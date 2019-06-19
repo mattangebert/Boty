@@ -73,15 +73,15 @@ class PhraseRepository extends ServiceEntityRepository
             $ptId = array($ptId);
         }
 
-        if (!empty($cId)) {
+        if (is_array($cId) && !empty($cId)) {
             $qb->andWhere($qb->expr()->in($alias. '.category', $cId));
         }
 
-        if (!empty($pId)) {
+        if (is_array($pId) &&!empty($pId)) {
             $qb->andWhere($qb->expr()->in($alias. '.phraseTyp', $pId));
         }
 
-        if (!empty($ptId)) {
+        if (is_array($ptId) &&!empty($ptId)) {
             $qb->andWhere($qb->expr()->in($alias. '.personalityTyp', $ptId));
         }
 
