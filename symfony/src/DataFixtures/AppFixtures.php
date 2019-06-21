@@ -459,6 +459,28 @@ class AppFixtures extends Fixture
             new PhraseDummy('Revenge on the Sith', 'Movie', 'Answer', 'Yoda', 'a2'),
             new PhraseDummy('Attack of the Clones', 'Movie', 'Answer', 'Yoda', 'a2'),
             new PhraseDummy('Return of the Jedi', 'Movie', 'Answer', 'Yoda', 'pack-end a2'),
+
+            new PhraseDummy('Fear is the path to the dark side. Fear leads to anger. Anger leads to hate. Hate leads to suffering', 'Random', 'Statement', 'Yoda'),
+            new PhraseDummy('Powerful you have become, the dark side I sense in you', 'Random', 'Statement', 'Yoda'),
+            new PhraseDummy('PATIENCE YOU MUST HAVE my young padawan', 'Random', 'Statement', 'Yoda'),
+            new PhraseDummy('Once you start down the dark path, forever will it dominate your destiny, consume you it will', 'Random', 'Statement', 'Yoda'),
+            new PhraseDummy('You must unlearn what you have learned', 'Random', 'Statement', 'Yoda'),
+            new PhraseDummy('When you look at the dark side, careful you must be. For the dark side looks back', 'Random', 'Statement', 'Yoda'),
+            new PhraseDummy('Do or do not. There is no try', 'Random', 'Statement', 'Yoda'),
+            new PhraseDummy('Ohhh. Great warrior.Wars not make one great', 'Random', 'Statement', 'Yoda'),
+            new PhraseDummy('Always two there are, no more, no less. A master and an apprentice', 'Random', 'Statement', 'Yoda'),
+            new PhraseDummy('Difficult to see. Always in motion is the future', 'Random', 'Statement', 'Yoda'),
+            new PhraseDummy('You think Yoda stops teaching, just because his student does not want to hear? A teacher Yoda is. Yoda teaches like drunkards drink, like killers kill', 'Random', 'Statement', 'Yoda'),
+            new PhraseDummy('Foreplay, cuddling – a Jedi craves not these things', 'Random', 'Statement', 'Yoda'),
+            new PhraseDummy('Lost a planet Master Obi-Wan has. How embarrassing', 'Random', 'Statement', 'Yoda'),
+            new PhraseDummy('Mudhole? Slimy? My home this is!', 'Random', 'Statement', 'Yoda'),
+            new PhraseDummy('When nine hundred years old you reach, look as good, you will not, hmmmm?', 'Random', 'Statement', 'Yoda'),
+            new PhraseDummy('Much to learn you still have…young padawan.” … “This is just the beginning!', 'Random', 'Statement', 'Yoda'),
+            new PhraseDummy('If no mistake have you made, yet losing you are … a different game you should play', 'Random', 'Statement', 'Yoda'),
+            new PhraseDummy('To answer power with power, the Jedi way this is not. In this war, a danger there is, of losing who we are', 'Random', 'Statement', 'Yoda'),
+            new PhraseDummy('Clear your mind must be, if you are to find the villains behind this plot', 'Random', 'Statement', 'Yoda'),
+            new PhraseDummy('To be Jedi is to face the truth, and choose. Give off light, or darkness, Padawan. Be a candle, or the night', 'Random', 'Statement', 'Yoda'),
+            new PhraseDummy('Hmm. In the end, cowards are those who follow the dark side', 'Random', 'Statement', 'Yoda', 'pack-end'),
         );
 
         $index = 0;
