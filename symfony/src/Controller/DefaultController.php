@@ -11,6 +11,7 @@ use App\Entity\PhraseTyp;
 use App\Form\ConversationType;
 use function Symfony\Component\DependencyInjection\Loader\Configurator\expr;
 use Symfony\Component\Form\Form;
+use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Routing\Annotation\Route;
@@ -20,159 +21,59 @@ class DefaultController extends BaseController
 {
     const NO_PHRASE_FOUND = 'No Phrase Found';
 
+    /** @var FormInterface $form */
+    private $form;
+
+    /** @var Bot $bot */
+    private $bot;
+
+    /** @var UserInterface $user*/
+    private $user;
+
+    /** @var Category $category*/
+    private $category;
+
+    private $conversation;
+
+    /** @var array $personalityTypIds */
+    private $personalityTypIds;
+
+    /** @var array $phrases */
+    private $phrases;
+
     /**
      * @Route("/", name="home")
      */
-    public function index(Request $request, UserInterface $user = null)
+    public function index(Request $request, UserInterface $user)
     {
-        $entityManager = $this->getDoctrine()->getManager();
-        $userName = $user->getName();
+        $this->user = $user;
+        $this->conversation = null;
+        $this->phrases['phrase'] = '';
+        $this->phrases['reply'] = '';
 
-        $conversation = null;
-        $random_phrase = '';
-        $reply = '';
-
-        /** @var Form $form */
-        $form = $this->createForm(ConversationType::class, $conversation, [
+        $this->form = $this->createForm(ConversationType::class, $this->conversation, [
             'data' => array('isResponse'=> $request->request->get('conversation')['isResponse'])
         ]);
 
-        $form->handleRequest($request);
+        $this->form->handleRequest($request);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            $conversation = $form->getData();
+        if ($this->form->isSubmitted() && $this->form->isValid()) {
+            $this->conversation = $this->form->getData();
 
-            /** @var PersonalityTyp $userPersonalityType */
-            $userPersonalityType = $conversation['personality'];
-
-            if (!$form->has('respond') || !$form->get('respond')->isClicked()) {
-
-                /** @var Bot $bot */
-                $bot = $conversation['bot'];
-                /** @var Personality $personality */
-                $personality = $bot->getPersonality();
-                /** @var Category $category */
-                $category = $conversation['category'];
-                /** @var PhraseTyp $type */
-                $type = $conversation['type'];
-
-                // get personality typ ids
-                $personalityTypIds = $this->getPersonalityTypIds($form, $userPersonalityType, $personality);
-
-                // get random phrase
-                $result = $this->getRandomPhraseByFilters($personalityTypIds, $category, $type);
-
-                // set phrase for view to random phrase if found
-                $random_phrase = empty($result) ? self::NO_PHRASE_FOUND : $result['phrase'];
-
-                if ($random_phrase !== self::NO_PHRASE_FOUND) {
-                    if ($form->get('talk_bot')->isClicked()) {
-                        $random_phrase = $bot->getName() . ': ' . $random_phrase;
-                    }
-                    if ($form->get('talk_self')->isClicked()) {
-                        $random_phrase = $user->getName() . ': ' . $random_phrase;
-                    }
-                }
-
-                // get response
-                if ($random_phrase !== self::NO_PHRASE_FOUND) {
-                    if ($form->get('talk_self')->isClicked()) {
-                        $replies = $entityManager->getRepository(
-                            Phrase::class)->findAllRepliesByFilters($result['id'],
-                            $category->getId(),
-                            '',
-                            $this->getBotPersonalityTypIds($personality)
-                        );
-
-                        if (!empty($replies)) {
-                            $reply = $replies[array_rand($replies)]->getPhrase();
-                        }
-                    }
-
-                    if ($form->get('talk_bot')->isClicked()) {
-                        $newForm = $form = $this->createForm(ConversationType::class, $conversation, [
-                            'data' => array('isResponse' => true)
-                        ]);
-
-                        $view = $this->render('default/index.html.twig', [
-                            'userName' => $userName,
-                            'form' => $newForm->createView(),
-                            'history' => $user->getConversation(),
-                            'phrase' => $random_phrase,
-                            'reply' => $reply
-                        ]);
-
-                        $this->updateConversation($user, $random_phrase, $reply);
-
-                        return $view;
-                    }
-                }
-
-                if ($reply != '') {
-                    if ($form->get('talk_bot')->isClicked()) {
-                        $reply = $user->getName() . ': ' . $reply;
-                    }
-                    if ($form->get('talk_self')->isClicked()) {
-                        $reply = $bot->getName() . ': ' . $reply;
-                    }
-                }
+            // handle default form
+            if (!$this->form->has('respond') || !$this->form->get('respond')->isClicked()) {
+               $view = $this->handleConversationForm();
             }
 
-            // user respond form
-            if ($form->has('respond') && $form->get('respond')->isClicked()) {
-                $history = $user->getConversation();
-
-                $searchPhrase = substr(end($history), strpos(end($history), ':') + 2);
-
-                /** @var Phrase $phrase */
-                $phrase = $entityManager->getRepository(Phrase::class)->findOneBy([
-                    'phrase' => $searchPhrase
-                ]);
-
-                $replies = $entityManager->getRepository(
-                    Phrase::class)->findAllRepliesByFilters($phrase->getId(),
-                    $phrase->getCategory()->getId(),
-                    '',
-                    $this->getUserPersonalityTypIds($userPersonalityType)
-                );
-
-                if (!empty($replies)) {
-                    $reply = $replies[array_rand($replies)]->getPhrase();
-                }
-
-                if ($reply != '') {
-                    $reply = $user->getName() . ': ' . $reply;
-                }
-
-                $newForm = $form = $this->createForm(ConversationType::class, $conversation, [
-                    'data' => array('isResponse' => false)
-                ]);
-
-                $view = $this->render('default/index.html.twig', [
-                    'userName' => $userName,
-                    'form' => $newForm->createView(),
-                    'history' => $user->getConversation(),
-                    'phrase' => $random_phrase,
-                    'reply' => $reply
-                ]);
-
-                $this->updateConversation($user, $random_phrase, $reply);
-
-                return $view;
-
+            // handle user respond form
+            if ($this->form->has('respond') && $this->form->get('respond')->isClicked()) {
+                $view = $this->handleRespondForm();
             }
         }
 
-        $view = $this->render('default/index.html.twig', [
-            'userName' => $userName,
-            'form' => $form->createView(),
-            'history' => $user->getConversation(),
-            'phrase' => $random_phrase,
-            'reply' => $reply
-        ]);
-
-        // safe phrase & reply in users history
-        $this->updateConversation($user, $random_phrase, $reply);
+        if (!isset($view)) {
+            $view = $this->getViewAndUpdateConversation($this->form, $this->phrases['phrase'], $this->phrases['reply']);
+        }
 
         return $view;
     }
@@ -183,20 +84,158 @@ class DefaultController extends BaseController
      * @param UserInterface|null $user
      * @return RedirectResponse
      */
-    public function clearConversation(UserInterface $user = null)
+    public function clearConversation(UserInterface $user)
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $user->setConversation(array());
-        $entityManager->persist($user);
+        $this->user = $user;
+        $this->user->setConversation(array());
+        $entityManager->persist($this->user);
         $entityManager->flush();
 
         return $this->redirectToRoute('home');
     }
 
-    private function updateConversation(UserInterface $user, string $random_phrase, string $reply)
+    private function handleConversationForm()
+    {
+        $this->bot = $this->conversation['bot'];
+        $this->category = $this->conversation['category'];
+
+        // set personality typ ids
+        $this->setPersonalityTypIds();
+
+        // get random phrase
+        /** @var Phrase $result */
+        $result = $this->getRandomPhraseByFilters();
+
+        // set phrase for view to random phrase if found
+        $this->phrases['phrase'] = empty($result) ? self::NO_PHRASE_FOUND : $result->getPhrase();
+        $this->phrases['phrase'] = $this->addNameToPhrase($this->phrases['phrase']);
+
+        // get response
+        if ($this->phrases['phrase'] !== self::NO_PHRASE_FOUND && !empty($result->getReplyPhrases()->getValues())) {
+            if ($this->form->get('talk_self')->isClicked()) {
+                $this->phrases['reply'] = $this->getReplyFromBot($result);
+            }
+
+            if ($this->form->get('talk_bot')->isClicked()) {
+                $newForm = $this->createForm(ConversationType::class, $this->conversation, [
+                    'data' => array('isResponse' => true)
+                ]);
+
+                $view = $this->getViewAndUpdateConversation($newForm, $this->phrases['phrase'], '');
+            }
+        }
+
+        return isset($view) ? $view : null;
+    }
+
+    private function handleRespondForm()
+    {
+        $this->phrases['reply'] = $this->getReplyFromUser();
+
+        $newForm = $this->createForm(ConversationType::class, $this->conversation, [
+            'data' => array('isResponse' => false)
+        ]);
+
+        return $this->getViewAndUpdateConversation($newForm, '', $this->phrases['reply']);
+    }
+
+    private function getReplyFromUser()
     {
         $entityManager = $this->getDoctrine()->getManager();
-        $history = $user->getConversation();
+        $history = $this->user->getConversation();
+        $reply = '';
+
+        $searchPhrase = substr(end($history), strpos(end($history), ':') + 2);
+
+        /** @var Phrase $phrase */
+        $phrase = $entityManager->getRepository(Phrase::class)->findOneBy([
+            'phrase' => $searchPhrase
+        ]);
+
+        if ($phrase) {
+            $replies = $entityManager->getRepository(
+                Phrase::class)->findAllRepliesByFilters($phrase->getId(),
+                $phrase->getCategory()->getId(),
+                '',
+                $this->getUserPersonalityTypIds()
+            );
+
+            if (!empty($replies)) {
+                $reply = $replies[array_rand($replies)]->getPhrase();
+                $reply = $this->addNameToPhrase($reply);
+            }
+        }
+
+        return $reply;
+    }
+
+    private function getReplyFromBot(Phrase $phrase)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $reply = '';
+
+        if ($phrase) {
+            $replies = $entityManager->getRepository(
+                Phrase::class)->findAllRepliesByFilters($phrase->getId(),
+                $this->category->getId(),
+                '',
+                $this->getBotPersonalityTypIds()
+            );
+
+            if (!empty($replies)) {
+                $reply = $replies[array_rand($replies)]->getPhrase();
+                $reply = $this->addNameToPhrase($reply, true);
+            }
+        }
+
+        return $reply;
+    }
+
+    private function addNameToPhrase(string $phrase, bool $isResponse = false)
+    {
+        $rtnPhrase = $phrase;
+        if($phrase !== '' && $phrase !== self::NO_PHRASE_FOUND) {
+            if( $this->form->has('respond') && $this->form->get('respond')->isClicked()) {
+                $rtnPhrase = $this->user->getName() . ': ' . $phrase;
+            }
+
+            if ($isResponse && $this->form->has('talk_self') && $this->form->get('talk_self')->isClicked()) {
+                $rtnPhrase = $this->bot->getName() . ': ' . $phrase;
+            }
+
+            if (!$isResponse && !$this->form->has('respond')) {
+                if ($this->form->has('talk_bot') && $this->form->get('talk_bot')->isClicked()) {
+                    $rtnPhrase = $this->bot->getName() . ': ' . $phrase;
+                }
+
+                if ($this->form->has('talk_self') && $this->form->get('talk_self')->isClicked()) {
+                    $rtnPhrase =$this->user->getName() . ': ' . $phrase;
+                }
+            }
+        }
+        return $rtnPhrase;
+    }
+
+    private function getViewAndUpdateConversation(FormInterface $form, string $random_phrase, string $reply)
+    {
+        $view = $this->render('default/index.html.twig', [
+            'userName' => $this->user->getName(),
+            'form' => $form->createView(),
+            'history' => $this->user->getConversation(),
+            'phrase' => $random_phrase,
+            'reply' => $reply
+        ]);
+
+        $this->updateConversation($random_phrase, $reply);
+
+        return $view;
+    }
+
+    private function updateConversation(string $random_phrase, string $reply)
+    {
+        $entityManager = $this->getDoctrine()->getManager();
+        $history = $this->user->getConversation();
 
         if ($random_phrase !== self::NO_PHRASE_FOUND) {
             array_push($history, $random_phrase);
@@ -206,22 +245,24 @@ class DefaultController extends BaseController
             array_push($history, $reply);
         }
 
-        $user->setConversation($history);
-        $entityManager->persist($user);
+        $this->user->setConversation($history);
+        $entityManager->persist($this->user);
         $entityManager->flush();
     }
 
-    private function getRandomPhraseByFilters(array $personalityTypIds, Category $category, PhraseTyp $type)
+    private function getRandomPhraseByFilters()
     {
         $entityManager = $this->getDoctrine()->getManager();
+        /** @var PhraseTyp $type */
+        $type = $this->conversation['type'];
 
-        $query = 'SELECT * FROM phrase WHERE category_id = ' . $category->getId() . ' AND phrase_typ_id = ' . $type->getId() . ' AND (';
-        foreach ($personalityTypIds as $key => $personalityTypId) {
+        $query = 'SELECT * FROM phrase WHERE category_id = ' . $this->category->getId() . ' AND phrase_typ_id = ' . $type->getId() . ' AND (';
+        foreach ($this->personalityTypIds as $key => $personalityTypId) {
 
             if (null != $personalityTypId) {
                 $query .= 'personality_typ_id = ' . $personalityTypId;
 
-                if($key < count($personalityTypIds) - 1) {
+                if($key < count($this->personalityTypIds) - 1) {
                     $query .= ' OR ';
                 }
             }
@@ -231,47 +272,53 @@ class DefaultController extends BaseController
         $statement->execute();
         $result = $statement->fetch();
 
+        if (!empty($result)) {
+           $result = $entityManager->getRepository(Phrase::class)->find($result['id']);
+        }
+
         return $result;
     }
 
-    private function getPersonalityTypIds(Form $form, PersonalityTyp $userPersonality, Personality $botPersonality)
+    private function setPersonalityTypIds()
     {
-        $personalityTypIds = null;
+        $this->personalityTypIds = null;
 
-        if($form->get('talk_self')->isClicked()) {
-            $personalityTypIds = $this->getUserPersonalityTypIds($userPersonality);
+        if($this->form->get('talk_self')->isClicked()) {
+            $this->personalityTypIds = $this->getUserPersonalityTypIds();
         }
 
-        if($form->get('talk_bot')->isClicked()) {
-            $personalityTypIds = $this->getBotPersonalityTypIds($botPersonality);
+        if($this->form->get('talk_bot')->isClicked()) {
+            $this->personalityTypIds = $this->getBotPersonalityTypIds();
         }
-
-        return $personalityTypIds;
-
     }
 
-    private function getUserPersonalityTypIds(PersonalityTyp $personality)
+    private function getUserPersonalityTypIds()
     {
+        /** @var PersonalityTyp $personalityTyp */
+        $personalityTyp = $this->conversation['personality'];
+
         $personalityTypIds = array(
-            $personality->getId(),
+            $personalityTyp->getId(),
             $this->getDefaultPersonalityTyp()->getId()
         );
 
         return $personalityTypIds;
     }
 
-    private function getBotPersonalityTypIds(Personality $personality)
+    private function getBotPersonalityTypIds()
     {
+        $personality = $this->bot->getPersonality();
+
         $personalityTypIds = array(
             $personality->getPersonalityTypOne()->getId(),
         );
 
         // personality typ two can be null
         if ($personality->getPersonalityTypTwo()) {
-            array_push($personalityTypIds, $personality->getPersonalityTypTwo()->getId());
+            $personalityTypIds[] =  $personality->getPersonalityTypTwo()->getId();
         }
 
-        array_push($personalityTypIds, $this->getDefaultPersonalityTyp()->getId());
+        $personalityTypIds[] = $this->getDefaultPersonalityTyp()->getId();
 
         return $personalityTypIds;
     }
