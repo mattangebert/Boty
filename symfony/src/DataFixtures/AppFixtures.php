@@ -41,7 +41,6 @@ class AppFixtures extends Fixture
         'Opinion',
         'Insult',
         'Greeting'
-
     );
 
     private $personalityTyps = array(
@@ -51,7 +50,8 @@ class AppFixtures extends Fixture
         'Flowery',
         'Mean',
         'Crazy',
-        'Vegan'
+        'Vegan',
+        'Yoda'
     );
 
     public function __construct(UserPasswordEncoderInterface $passwordEncoder)
@@ -73,6 +73,7 @@ class AppFixtures extends Fixture
         $this->createPhraseToReplyFixtures($manager);
 
         $this->createBotMelanie($manager);
+        $this->createBotYoda($manager);
     }
 
     private function createUserFixtures(ObjectManager $manager)
@@ -221,6 +222,28 @@ class AppFixtures extends Fixture
         $manager->flush();
     }
 
+    private function createBotYoda(ObjectManager $manager)
+    {
+        $personality =  new Personality();
+
+        /** @var PersonalityTyp $refOne */
+        $refOne = $this->getReference('Yoda');
+        $personality->setName('Yoda');
+        $personality->setPersonalityTypOne($refOne);
+        $manager->persist($personality);
+
+
+        $yoda =  new Bot();
+
+        $yoda->setName('Yoda');
+        $yoda->setEnabled(true);
+        $yoda->setCreatedAt(new \DateTime());
+        $yoda->setPersonality($personality);
+
+        $manager->persist($yoda);
+        $manager->flush();
+    }
+
 //    private function createPhraseFixtures(ObjectManager $manager)
 //    {
 //        foreach ($this->personalityTyps as $personalityTypName) {
@@ -256,130 +279,196 @@ class AppFixtures extends Fixture
     private function createPhrases(ObjectManager $manager)
     {
         $phrases = array(
-            $p001 = new PhraseDummy( 'Yes', 'Default', 'Answer', 'Normal'),
-            $p001a = new PhraseDummy('Certainly', 'Default', 'Answer', 'Formal'),
-            $p001b = new PhraseDummy('Ok', 'Default', 'Answer', 'Informal'),
-            $p001c = new PhraseDummy('Surely', 'Default', 'Answer', 'Flowery'),
-            $p001d = new PhraseDummy('Obviously', 'Default', 'Answer', 'Mean'),
-            $p001e = new PhraseDummy( 'Uh-huh', 'Default', 'Answer', 'Crazy'),
-            $p001f = new PhraseDummy( 'Yes I\'m a Vegan', 'Default', 'Answer', 'Vegan'),
-            $p001g = new PhraseDummy('Yep', 'Default', 'Answer', 'Informal'),
-            $p001h = new PhraseDummy('Sure', 'Default', 'Answer', 'Informal'),
-            $p001i = new PhraseDummy('You bet', 'Default', 'Answer', 'Informal'),
-            $p001j = new PhraseDummy( 'Okay', 'Default', 'Answer', 'Normal'),
-            $p001k = new PhraseDummy( 'Okie dokie', 'Default', 'Answer', 'Normal'),
-            $p001l = new PhraseDummy( 'Alright', 'Default', 'Answer', 'Normal'),
-            $p001m = new PhraseDummy( 'Sounds good', 'Default', 'Answer', 'Normal'),
-            $p001n = new PhraseDummy('Definitly', 'Default', 'Answer', 'Formal'),
-            $p001o = new PhraseDummy('Gladly', 'Default', 'Answer', 'Formal'),
-            $p001p = new PhraseDummy('Absolutely', 'Default', 'Answer', 'Formal'),
-            $p001q = new PhraseDummy('Indeed', 'Default', 'Answer', 'Formal'),
-            $p001r = new PhraseDummy('Undoubtedly', 'Default', 'Answer', 'Flowery'),
-            $p001s = new PhraseDummy('Indubitably', 'Default', 'Answer', 'Flowery'),
-            $p001t = new PhraseDummy('Fine', 'Default', 'Answer', 'Mean'),
-            $p001u = new PhraseDummy('Noooooooo', 'Default', 'Answer', 'Mean'),
-            $p001v = new PhraseDummy( 'Forsooth', 'Default', 'Answer', 'Crazy'),
-            $p001w = new PhraseDummy( 'Verily', 'Default', 'Answer', 'Crazy'),
-            $p001x = new PhraseDummy( 'Yeay', 'Default', 'Answer', 'Vegan', 'pack-end'),
+            new PhraseDummy( 'Yes', 'Default', 'Answer', 'Normal'),
+            new PhraseDummy('Certainly', 'Default', 'Answer', 'Formal'),
+            new PhraseDummy('Ok', 'Default', 'Answer', 'Informal'),
+            new PhraseDummy('Surely', 'Default', 'Answer', 'Flowery'),
+            new PhraseDummy('Obviously', 'Default', 'Answer', 'Mean'),
+            new PhraseDummy( 'Uh-huh', 'Default', 'Answer', 'Crazy'),
+            new PhraseDummy( 'Yes I\'m a Vegan', 'Default', 'Answer', 'Vegan'),
+            new PhraseDummy('Yep', 'Default', 'Answer', 'Informal'),
+            new PhraseDummy('Sure', 'Default', 'Answer', 'Informal'),
+            new PhraseDummy('You bet', 'Default', 'Answer', 'Informal'),
+            new PhraseDummy( 'Okay', 'Default', 'Answer', 'Normal'),
+            new PhraseDummy( 'Okie dokie', 'Default', 'Answer', 'Normal'),
+            new PhraseDummy( 'Alright', 'Default', 'Answer', 'Normal'),
+            new PhraseDummy( 'Sounds good', 'Default', 'Answer', 'Normal'),
+            new PhraseDummy('Definitly', 'Default', 'Answer', 'Formal'),
+            new PhraseDummy('Gladly', 'Default', 'Answer', 'Formal'),
+            new PhraseDummy('Absolutely', 'Default', 'Answer', 'Formal'),
+            new PhraseDummy('Indeed', 'Default', 'Answer', 'Formal'),
+            new PhraseDummy('Undoubtedly', 'Default', 'Answer', 'Flowery'),
+            new PhraseDummy('Indubitably', 'Default', 'Answer', 'Flowery'),
+            new PhraseDummy('Fine', 'Default', 'Answer', 'Mean'),
+            new PhraseDummy('Noooooooo', 'Default', 'Answer', 'Mean'),
+            new PhraseDummy( 'Forsooth', 'Default', 'Answer', 'Crazy'),
+            new PhraseDummy( 'Verily', 'Default', 'Answer', 'Crazy'),
+            new PhraseDummy( 'Yes the answer is', 'Default', 'Answer', 'Yoda'),
+            new PhraseDummy( 'Yes Yes, hmmm', 'Default', 'Answer', 'Yoda'),
+            new PhraseDummy( 'Herh herh herh', 'Default', 'Answer', 'Yoda'),
+            new PhraseDummy( 'Yeay', 'Default', 'Answer', 'Vegan', 'pack-end'),
 
-            $p002 = new PhraseDummy('No', 'Default', 'Answer', 'Normal'),
-            $p002a = new PhraseDummy( 'Unfortunately not', 'Default', 'Answer', 'Formal'),
-            $p002b = new PhraseDummy( 'Nope', 'Default', 'Answer', 'Informal'),
-            $p002c = new PhraseDummy('That doesn\'t sound right', 'Default', 'Answer', 'Flowery'),
-            $p002d = new PhraseDummy('Fuck Off', 'Default', 'Answer', 'Mean'),
-            $p002e = new PhraseDummy('I\'m slammed', 'Default', 'Answer', 'Crazy'),
-            $p002f = new PhraseDummy( 'It\'s not my thing', 'Default', 'Answer', 'Vegan'),
-            $p002g = new PhraseDummy('Look! Squirrel!', 'Default', 'Answer', 'Crazy'),
-            $p002h = new PhraseDummy( 'Heck No', 'Default', 'Answer', 'Informal'),
-            $p002i = new PhraseDummy('No Way', 'Default', 'Answer', 'Normal'),
-            $p002j = new PhraseDummy( 'Regrettably not', 'Default', 'Answer', 'Formal'),
-            $p002k = new PhraseDummy( 'It\'s a Wednesday. I have a "No on Wednesday" policy', 'Default', 'Answer', 'Vegan'),
-            $p002l = new PhraseDummy('Ask me in a year', 'Default', 'Answer', 'Mean'),
-            $p002m = new PhraseDummy('If only i could say yes', 'Default', 'Answer', 'Formal'),
-            $p002n = new PhraseDummy('I’m at the end of my rope right now so have to take a raincheck', 'Default', 'Answer', 'Flowery'),
-            $p002o = new PhraseDummy('I’m in a season of NO', 'Default', 'Answer', 'Mean'),
-            $p002p = new PhraseDummy('NoNoNoNoNoNo', 'Default', 'Answer', 'Crazy'),
-            $p002q = new PhraseDummy( 'My body says yes, but my heart says No', 'Default', 'Answer', 'Flowery'),
-            $p002r = new PhraseDummy( 'N to the O.', 'Default', 'Answer', 'Flowery', 'pack-end'),
+            new PhraseDummy('No', 'Default', 'Answer', 'Normal'),
+            new PhraseDummy( 'Unfortunately not', 'Default', 'Answer', 'Formal'),
+            new PhraseDummy( 'Nope', 'Default', 'Answer', 'Informal'),
+            new PhraseDummy('That doesn\'t sound right', 'Default', 'Answer', 'Flowery'),
+            new PhraseDummy('Fuck Off', 'Default', 'Answer', 'Mean'),
+            new PhraseDummy('I\'m slammed', 'Default', 'Answer', 'Crazy'),
+            new PhraseDummy( 'It\'s not my thing', 'Default', 'Answer', 'Vegan'),
+            new PhraseDummy('Look! Squirrel!', 'Default', 'Answer', 'Crazy'),
+            new PhraseDummy( 'Heck No', 'Default', 'Answer', 'Informal'),
+            new PhraseDummy('No Way', 'Default', 'Answer', 'Normal'),
+            new PhraseDummy( 'Regrettably not', 'Default', 'Answer', 'Formal'),
+            new PhraseDummy( 'It\'s a Wednesday. I have a "No on Wednesday" policy', 'Default', 'Answer', 'Vegan'),
+            new PhraseDummy('Ask me in a year', 'Default', 'Answer', 'Mean'),
+            new PhraseDummy('If only i could say yes', 'Default', 'Answer', 'Formal'),
+            new PhraseDummy('I’m at the end of my rope right now so have to take a raincheck', 'Default', 'Answer', 'Flowery'),
+            new PhraseDummy('I’m in a season of NO', 'Default', 'Answer', 'Mean'),
+            new PhraseDummy('NoNoNoNoNoNo', 'Default', 'Answer', 'Crazy'),
+            new PhraseDummy( 'My body says yes, but my heart says No', 'Default', 'Answer', 'Flowery'),
+            new PhraseDummy( 'To answer, I no have', 'Default', 'Answer', 'Yoda'),
+            new PhraseDummy( 'No Yes, hmmm', 'Default', 'Answer', 'Yoda'),
+            new PhraseDummy( 'To disagree I have', 'Default', 'Answer', 'Yoda'),
+            new PhraseDummy( 'N to the O.', 'Default', 'Answer', 'Flowery', 'pack-end'),
 
-            $p003 =  new PhraseDummy('How are you', 'Default', 'Greeting', 'Normal'),
-            $p003a =  new PhraseDummy('Hey Hey', 'Default', 'Greeting', 'Informal'),
-            $p003b =  new PhraseDummy('What\'s up', 'Default', 'Greeting', 'Informal'),
-            $p003c =  new PhraseDummy('Good to see you', 'Default', 'Greeting', 'Normal'),
-            $p003d =  new PhraseDummy('Nice to see you', 'Default', 'Greeting', 'Formal'),
-            $p003e =  new PhraseDummy('Long time no see', 'Default', 'Greeting', 'Normal'),
-            $p003f =  new PhraseDummy('It\'s been a while', 'Default', 'Greeting', 'Informal'),
-            $p003g =  new PhraseDummy('Good morning', 'Default', 'Greeting', 'Formal'),
-            $p003h =  new PhraseDummy('Pleased to meet you', 'Default', 'Greeting', 'Formal'),
-            $p003i =  new PhraseDummy('Yo', 'Default', 'Greeting', 'Informal'),
-            $p003j =  new PhraseDummy('Whazzup?', 'Default', 'Greeting', 'Crazy'),
-            $p003k =  new PhraseDummy(' G’day mate', 'Default', 'Greeting', 'Flowery'),
-            $p003l =  new PhraseDummy('Wish you a horrible day', 'Default', 'Greeting', 'Mean'),
-            $p003m =  new PhraseDummy('Why are you here?', 'Default', 'Greeting', 'Mean'),
-            $p003n =  new PhraseDummy('Fucking Asshole', 'Default', 'Greeting', 'Mean'),
-            $p003o =  new PhraseDummy('Holy Cow', 'Default', 'Greeting', 'Vegan'),
-            $p003p =  new PhraseDummy('Happy Vegan Day', 'Default', 'Greeting', 'Vegan'),
-            $p003q =  new PhraseDummy('A wonderfull day to you', 'Default', 'Greeting', 'Flowery'),
-            $p003r =  new PhraseDummy('Whalalalalaala', 'Default', 'Greeting', 'Crazy'),
-            $p003s =  new PhraseDummy('Hello', 'Default', 'Greeting', 'Normal', 'pack-end'),
+            new PhraseDummy('How are you', 'Default', 'Greeting', 'Normal'),
+            new PhraseDummy('Hey Hey', 'Default', 'Greeting', 'Informal'),
+            new PhraseDummy('What\'s up', 'Default', 'Greeting', 'Informal'),
+            new PhraseDummy('Good to see you', 'Default', 'Greeting', 'Normal'),
+            new PhraseDummy('Nice to see you', 'Default', 'Greeting', 'Formal'),
+            new PhraseDummy('Long time no see', 'Default', 'Greeting', 'Normal'),
+            new PhraseDummy('It\'s been a while', 'Default', 'Greeting', 'Informal'),
+            new PhraseDummy('Good morning', 'Default', 'Greeting', 'Formal'),
+            new PhraseDummy('Pleased to meet you', 'Default', 'Greeting', 'Formal'),
+            new PhraseDummy('Yo', 'Default', 'Greeting', 'Informal'),
+            new PhraseDummy('Whazzup?', 'Default', 'Greeting', 'Crazy'),
+            new PhraseDummy(' G’day mate', 'Default', 'Greeting', 'Flowery'),
+            new PhraseDummy('Wish you a horrible day', 'Default', 'Greeting', 'Mean'),
+            new PhraseDummy('Why are you here?', 'Default', 'Greeting', 'Mean'),
+            new PhraseDummy('Fucking Asshole', 'Default', 'Greeting', 'Mean'),
+            new PhraseDummy('Holy Cow', 'Default', 'Greeting', 'Vegan'),
+            new PhraseDummy('Happy Vegan Day', 'Default', 'Greeting', 'Vegan'),
+            new PhraseDummy('A wonderfull day to you', 'Default', 'Greeting', 'Flowery'),
+            new PhraseDummy('Whalalalalaala', 'Default', 'Greeting', 'Crazy'),
+            new PhraseDummy('May the Force be with you', 'Default', 'Greeting', 'Yoda'),
+            new PhraseDummy('To see you good.  Yeesssssss', 'Default', 'Greeting', 'Yoda'),
+            new PhraseDummy('To meet you pleased. I am', 'Default', 'Greeting', 'Yoda'),
+            new PhraseDummy('Hello', 'Default', 'Greeting', 'Normal', 'pack-end'),
 
-            $p004 =  new PhraseDummy('How are you?', 'Default', 'Question', 'Normal', 'q1'),
-            $p004a =  new PhraseDummy('How are you doing?', 'Default', 'Question', 'Normal', 'q1'),
-            $p004b =  new PhraseDummy('How do you do?', 'Default', 'Question', 'Informal', 'q1'),
-            $p004c =  new PhraseDummy('How\'s everything?', 'Default', 'Question', 'Informal'),
-            $p004d =  new PhraseDummy('Hope you\'re feeling well today?', 'Default', 'Question', 'Flowery', 'q1'),
-            $p004e =  new PhraseDummy('How do you do?', 'Default', 'Question', 'Formal', 'q1'),
-            $p004f =  new PhraseDummy('Feeling well?', 'Default', 'Question', 'Informal', 'q1'),
-            $p004g =  new PhraseDummy('Hope you\'re feeling bad', 'Default', 'Question', 'Mean', 'q1'),
-            $p004h =  new PhraseDummy('I don\'t care how you are', 'Default', 'Question', 'Mean', 'q1'),
-            $p004i =  new PhraseDummy('Do you feel bad?, I don\'t give a *', 'Default', 'Question', 'Mean', 'q1'),
-            $p004j =  new PhraseDummy('Did you have a pleasant day?', 'Default', 'Question', 'Flowery', 'q1'),
-            $p004k =  new PhraseDummy('How\'s the Duck in the oven?', 'Default', 'Question', 'Crazy', 'q1'),
-            $p004l =  new PhraseDummy('Muhahaha *Evil laugh cough cough* mh how are you?', 'Default', 'Question', 'Crazy', 'q1'),
-            $p004m =  new PhraseDummy('I\'m Vegan, how are you?', 'Default', 'Question', 'Vegan', 'q1'),
-            $p004n =  new PhraseDummy('How\'s your day?', 'Default', 'Question', 'Vegan', 'pack-end q1'),
+            new PhraseDummy('How are you?', 'Default', 'Question', 'Normal', 'q1'),
+            new PhraseDummy('How are you doing?', 'Default', 'Question', 'Normal', 'q1'),
+            new PhraseDummy('How do you do?', 'Default', 'Question', 'Informal', 'q1'),
+            new PhraseDummy('How\'s everything?', 'Default', 'Question', 'Informal'),
+            new PhraseDummy('Hope you\'re feeling well today?', 'Default', 'Question', 'Flowery', 'q1'),
+            new PhraseDummy('How do you do?', 'Default', 'Question', 'Formal', 'q1'),
+            new PhraseDummy('Feeling well?', 'Default', 'Question', 'Informal', 'q1'),
+            new PhraseDummy('Hope you\'re feeling bad', 'Default', 'Question', 'Mean', 'q1'),
+            new PhraseDummy('I don\'t care how you are', 'Default', 'Question', 'Mean', 'q1'),
+            new PhraseDummy('Do you feel bad?, I don\'t give a *', 'Default', 'Question', 'Mean', 'q1'),
+            new PhraseDummy('Did you have a pleasant day?', 'Default', 'Question', 'Flowery', 'q1'),
+            new PhraseDummy('How\'s the Duck in the oven?', 'Default', 'Question', 'Crazy', 'q1'),
+            new PhraseDummy('Muhahaha *Evil laugh cough cough* mh how are you?', 'Default', 'Question', 'Crazy', 'q1'),
+            new PhraseDummy('I\'m Vegan, how are you?', 'Default', 'Question', 'Vegan', 'q1'),
+            new PhraseDummy('Hope, feeling well today, you are, hmm?  Hmmmmmm.', 'Default', 'Question', 'Yoda', 'q1'),
+            new PhraseDummy('Pleasant day, did you have, yeees?', 'Default', 'Question', 'Yoda', 'q1'),
+            new PhraseDummy('How doing are you, hmm?  Yes, hmmm.', 'Default', 'Question', 'Yoda', 'q1'),
+            new PhraseDummy('How\'s your day?', 'Default', 'Question', 'Vegan', 'pack-end q1'),
 
-            $p005 =  new PhraseDummy('Good', 'Default', 'Answer', 'Normal', 'a1'),
-            $p005a =  new PhraseDummy('Acceptable', 'Default', 'Answer', 'Mean', 'a1'),
-            $p005b =  new PhraseDummy('Excellent', 'Default', 'Answer', 'Formal', 'a1'),
-            $p005c =  new PhraseDummy('Awesome', 'Default', 'Answer', 'Informal', 'a1'),
-            $p005d =  new PhraseDummy('Great', 'Default', 'Answer', 'Normal', 'a1'),
-            $p005e =  new PhraseDummy('Favorable', 'Default', 'Answer', 'Flowery', 'a1'),
-            $p005f =  new PhraseDummy('Marvelous', 'Default', 'Answer', 'Flowery', 'a1'),
-            $p005g =  new PhraseDummy('Wonderful', 'Default', 'Answer', 'Vegan', 'a1'),
-            $p005h =  new PhraseDummy('Well', 'Default', 'Answer', 'Formal', 'a1'),
-            $p005i =  new PhraseDummy('Satisfactory', 'Default', 'Answer', 'Vegan', 'a1'),
-            $p005j =  new PhraseDummy('Super', 'Default', 'Answer', 'Informal', 'a1'),
-            $p005k =  new PhraseDummy('Prime', 'Default', 'Answer', 'Flowery', 'a1'),
-            $p005l =  new PhraseDummy('Superior', 'Default', 'Answer', 'Mean', 'a1'),
-            $p005m =  new PhraseDummy('Up to snuff', 'Default', 'Answer', 'Crazy', 'a1'),
-            $p005n =  new PhraseDummy('Worthy', 'Default', 'Answer', 'Crazy', 'a1'),
-            $p005o =  new PhraseDummy('Wuff Wuff', 'Default', 'Answer', 'Crazy', 'a1'),
-            $p005p =  new PhraseDummy('Woaw', 'Default', 'Answer', 'Vegan', 'pack-end a1'),
+            new PhraseDummy('Good', 'Default', 'Answer', 'Normal', 'a1'),
+            new PhraseDummy('Acceptable', 'Default', 'Answer', 'Mean', 'a1'),
+            new PhraseDummy('Excellent', 'Default', 'Answer', 'Formal', 'a1'),
+            new PhraseDummy('Awesome', 'Default', 'Answer', 'Informal', 'a1'),
+            new PhraseDummy('Great', 'Default', 'Answer', 'Normal', 'a1'),
+            new PhraseDummy('Favorable', 'Default', 'Answer', 'Flowery', 'a1'),
+            new PhraseDummy('Marvelous', 'Default', 'Answer', 'Flowery', 'a1'),
+            new PhraseDummy('Wonderful', 'Default', 'Answer', 'Vegan', 'a1'),
+            new PhraseDummy('Well', 'Default', 'Answer', 'Formal', 'a1'),
+            new PhraseDummy('Satisfactory', 'Default', 'Answer', 'Vegan', 'a1'),
+            new PhraseDummy('Super', 'Default', 'Answer', 'Informal', 'a1'),
+            new PhraseDummy('Prime', 'Default', 'Answer', 'Flowery', 'a1'),
+            new PhraseDummy('Superior', 'Default', 'Answer', 'Mean', 'a1'),
+            new PhraseDummy('Up to snuff', 'Default', 'Answer', 'Crazy', 'a1'),
+            new PhraseDummy('Worthy', 'Default', 'Answer', 'Crazy', 'a1'),
+            new PhraseDummy('Wuff Wuff', 'Default', 'Answer', 'Crazy', 'a1'),
+            new PhraseDummy('Feel the force!', 'Default', 'Answer', 'Yoda', 'a1'),
+            new PhraseDummy('Very Good. Yes, hmmm', 'Default', 'Answer', 'Yoda', 'a1'),
+            new PhraseDummy('Many of the truths that we cling to depend on our point of view', 'Default', 'Answer', 'Yoda', 'a1'),
+            new PhraseDummy('Woaw', 'Default', 'Answer', 'Vegan', 'pack-end a1'),
 
-            $p006 =  new PhraseDummy('Bad', 'Default', 'Answer', 'Normal', 'a1'),
-            $p006a =  new PhraseDummy('Ok', 'Default', 'Answer', 'Formal', 'a1'),
-            $p006b =  new PhraseDummy('Awful', 'Default', 'Answer', 'Informal', 'a1'),
-            $p006c =  new PhraseDummy('Atrocious', 'Default', 'Answer', 'Informal', 'a1'),
-            $p006d =  new PhraseDummy('Not Good', 'Default', 'Answer', 'Normal', 'a1'),
-            $p006e =  new PhraseDummy('Lousy', 'Default', 'Answer', 'Informal', 'a1'),
-            $p006f =  new PhraseDummy('Rough', 'Default', 'Answer', 'Formal', 'a1'),
-            $p006g =  new PhraseDummy('Bottom out', 'Default', 'Answer', 'Flowery', 'a1'),
-            $p006h =  new PhraseDummy('Inadequate', 'Default', 'Answer', 'Formal', 'a1'),
-            $p006i =  new PhraseDummy('Abominable', 'Default', 'Answer', 'Flowery', 'a1'),
-            $p006j =  new PhraseDummy('None of your business', 'Default', 'Answer', 'Mean', 'a1'),
-            $p006k =  new PhraseDummy('Better then you', 'Default', 'Answer', 'Mean', 'a1'),
-            $p006l =  new PhraseDummy('Imperfect', 'Default', 'Answer', 'Mean', 'a1'),
-            $p006m =  new PhraseDummy('Garbage', 'Default', 'Answer', 'Vegan', 'a1'),
-            $p006n =  new PhraseDummy('Bummer', 'Default', 'Answer', 'Vegan', 'a1'),
-            $p006o =  new PhraseDummy('Grrr', 'Default', 'Answer', 'Crazy', 'a1'),
-            $p006p =  new PhraseDummy('Hisssss', 'Default', 'Answer', 'Crazy', 'pack-end a1'),
+            new PhraseDummy('Bad', 'Default', 'Answer', 'Normal', 'a1'),
+            new PhraseDummy('Ok', 'Default', 'Answer', 'Formal', 'a1'),
+            new PhraseDummy('Awful', 'Default', 'Answer', 'Informal', 'a1'),
+            new PhraseDummy('Atrocious', 'Default', 'Answer', 'Informal', 'a1'),
+            new PhraseDummy('Not Good', 'Default', 'Answer', 'Normal', 'a1'),
+            new PhraseDummy('Lousy', 'Default', 'Answer', 'Informal', 'a1'),
+            new PhraseDummy('Rough', 'Default', 'Answer', 'Formal', 'a1'),
+            new PhraseDummy('Bottom out', 'Default', 'Answer', 'Flowery', 'a1'),
+            new PhraseDummy('Inadequate', 'Default', 'Answer', 'Formal', 'a1'),
+            new PhraseDummy('Abominable', 'Default', 'Answer', 'Flowery', 'a1'),
+            new PhraseDummy('None of your business', 'Default', 'Answer', 'Mean', 'a1'),
+            new PhraseDummy('Better then you', 'Default', 'Answer', 'Mean', 'a1'),
+            new PhraseDummy('Imperfect', 'Default', 'Answer', 'Mean', 'a1'),
+            new PhraseDummy('Garbage', 'Default', 'Answer', 'Vegan', 'a1'),
+            new PhraseDummy('Bummer', 'Default', 'Answer', 'Vegan', 'a1'),
+            new PhraseDummy('Grrr', 'Default', 'Answer', 'Crazy', 'a1'),
+            new PhraseDummy('Not if anything to say about it I have', 'Default', 'Answer', 'Yoda', 'a1'),
+            new PhraseDummy('Clear your mind must be, if you are to find the villains behind this plot', 'Default', 'Answer', 'Yoda', 'a1'),
+            new PhraseDummy('That is why you fail', 'Default', 'Answer', 'Yoda', 'a1'),
+            new PhraseDummy('Hisssss', 'Default', 'Answer', 'Crazy', 'pack-end a1'),
 
+            new PhraseDummy('What is your favourite Movie?', 'Movie', 'Question', 'Normal', 'q2'),
+            new PhraseDummy('What Movie do you like the most?', 'Movie', 'Question', 'Normal', 'q2'),
+            new PhraseDummy('What is your most liked Movie?', 'Movie', 'Question', 'Normal', 'q2'),
+            new PhraseDummy('Do you have a favourite Movie?', 'Movie', 'Question', 'Informal', 'q2'),
+            new PhraseDummy('What Movie do you love?', 'Movie', 'Question', 'Informal', 'q2'),
+            new PhraseDummy('Tell me your favourite Movie?', 'Movie', 'Question', 'Informal', 'q2'),
+            new PhraseDummy('Which Movie would you call your favourite?', 'Movie', 'Question', 'Formal', 'q2'),
+            new PhraseDummy('Which Movie is your personal favourite?', 'Movie', 'Question', 'Formal', 'q2'),
+            new PhraseDummy('What would you say is the Movie you treasured the most?', 'Movie', 'Question', 'Flowery', 'q2'),
+            new PhraseDummy('Which is the Movie you choose as your best-loved?', 'Movie', 'Question', 'Flowery', 'q2'),
+            new PhraseDummy('Your favourite Movie? Let\' me Guess you still read children book only', 'Movie', 'Question', 'Mean', 'q2'),
+            new PhraseDummy('Not that i care, but im forced to ask: What\'s your favourite Movie?', 'Movie', 'Question', 'Mean', 'q2'),
+            new PhraseDummy('You gonna tell a Idiot like you got a good favourite Movie?', 'Movie', 'Question', 'Mean', 'q2'),
+            new PhraseDummy('Moooooouvieeee?', 'Movie', 'Question', 'Crazy', 'q2'),
+            new PhraseDummy('Got a favourite Movie? Tell me Tell me', 'Movie', 'Question', 'Crazy', 'q2'),
+            new PhraseDummy('favourite Movie where no Animals were hurt?', 'Movie', 'Question', 'Vegan', 'q2'),
+            new PhraseDummy('Your favourite movie, what is, hmm?', 'Movie', 'Question', 'Yoda', 'q2'),
+            new PhraseDummy('Favourite movie, you have, hmm?  Hmmmmmm', 'Movie', 'Question', 'Yoda', 'pack-end q2'),
+
+            new PhraseDummy('Men in Black', 'Movie', 'Answer', 'Normal', 'a2'),
+            new PhraseDummy('Batman', 'Movie', 'Answer', 'Normal', 'a2'),
+            new PhraseDummy('Captain Marvel', 'Movie', 'Answer', 'Normal', 'a2'),
+            new PhraseDummy('English for dummies', 'Movie', 'Answer', 'Formal', 'a2'),
+            new PhraseDummy('The diary of anne frank', 'Movie', 'Answer', 'Formal', 'a2'),
+            new PhraseDummy('Freedom Writers', 'Movie', 'Answer', 'Formal', 'a2'),
+            new PhraseDummy('Inglourious Basterds', 'Movie', 'Answer', 'Informal', 'a2'),
+            new PhraseDummy('Last Summer', 'Movie', 'Answer', 'Informal', 'a2'),
+            new PhraseDummy('American Pie', 'Movie', 'Answer', 'Informal', 'a2'),
+            new PhraseDummy('Driving Miss Daisy', 'Movie', 'Answer', 'Flowery', 'a2'),
+            new PhraseDummy('The Wizard of Oz', 'Movie', 'Answer', 'Flowery', 'a2'),
+            new PhraseDummy('Alice in Wonderland', 'Movie', 'Answer', 'Flowery', 'a2'),
+            new PhraseDummy('Daddy doesnt like you extended Version', 'Movie', 'Answer', 'Mean', 'a2'),
+            new PhraseDummy('Your Mom knows why', 'Movie', 'Answer', 'Mean', 'a2'),
+            new PhraseDummy('Fuckface Second Part your Mother', 'Movie', 'Answer', 'Mean', 'a2'),
+            new PhraseDummy('The Sixth Sense', 'Movie', 'Answer', 'Crazy', 'a2'),
+            new PhraseDummy('Shutter Island', 'Movie', 'Answer', 'Crazy', 'a2'),
+            new PhraseDummy('Inception', 'Movie', 'Answer', 'Crazy', 'a2'),
+            new PhraseDummy('Vegucated', 'Movie', 'Answer', 'Vegan', 'a2'),
+            new PhraseDummy('Speciesism', 'Movie', 'Answer', 'Vegan', 'a2'),
+            new PhraseDummy('Live and Let Live', 'Movie', 'Answer', 'Vegan', 'a2'),
+            new PhraseDummy('Revenge on the Sith', 'Movie', 'Answer', 'Yoda', 'a2'),
+            new PhraseDummy('Attack of the Clones', 'Movie', 'Answer', 'Yoda', 'a2'),
+            new PhraseDummy('Return of the Jedi', 'Movie', 'Answer', 'Yoda', 'pack-end a2'),
         );
 
         $index = 0;
-        $q1 = array();
-        $a1 = array();
+        $packs = [
+            'q1' => $q1 = array(),
+            'a1' => $q1 = array(),
+            'q2' => $q1 = array(),
+            'a2' => $q1 = array(),
+        ];
+
 
         foreach ($phrases as $key => $phrase) {
             /** @var PhraseDummy $phrase */
@@ -398,12 +487,13 @@ class AppFixtures extends Fixture
             $manager->persist($p);
             $this->addReference('phrase-'.$key, $p);
 
-            if(strpos($phrase->getIndex(), 'q1') !== false) {
-                array_push($q1, 'phrase-'.$key);
-            }
 
-            if(strpos($phrase->getIndex(), 'a1') !== false) {
-                array_push($a1, 'phrase-'.$key);
+
+            foreach ($packs as $key2 => &$pack) {
+                if(strpos($phrase->getIndex(), $key2) !== false) {
+                    $pack[] = 'phrase-'.$key;
+                }
+
             }
 
             // set Phrase to Alternative
@@ -422,59 +512,28 @@ class AppFixtures extends Fixture
             }
         }
 
-        // set Phrase to Reply
-        foreach ($q1 as $pKey) {
-            /** @var Phrase $p */
-            $p =  $this->getReference($pKey);
 
-            foreach ($a1 as $rKey) {
-                /** @var Phrase $reply */
-                $reply = $this->getReference($rKey);
+        $packKeys = array_keys($packs);
 
-                $rtp = new PhraseToReply();
-                $rtp->setPhrase($p);
-                $rtp->setReplyPhrase($reply);
+        for ($k = 0; $k < count($packKeys); $k+= 2) {
+            foreach ($packs[$packKeys[$k]] as $pKey) {
+                /** @var Phrase $p */
+                $p =  $this->getReference($pKey);
 
-                $manager->persist($rtp);
+                foreach ($packs[$packKeys[$k + 1]] as $rKey) {
+                    /** @var Phrase $reply */
+                    $reply = $this->getReference($rKey);
+
+                    $rtp = new PhraseToReply();
+                    $rtp->setPhrase($p);
+                    $rtp->setReplyPhrase($reply);
+
+                    $manager->persist($rtp);
+                }
             }
         }
 
         $manager->flush();
-
-        $categories = array(
-        'Default',
-        'Random',
-        'Family & Friendship',
-        'Movie',
-        'Music',
-        'Sports',
-        'Food',
-        'Travel & Nature',
-        'Technology',
-        'Fashion',
-        'Hobbies',
-        'Weird'
-        );
-
-        $phraseTyps = array(
-        'DefaultType',
-        'Question',
-        'Answer',
-        'Statement',
-        'Opinion',
-        'Insult',
-        'Greeting'
-        );
-
-        $personalityTyps = array(
-        'Normal',
-        'Formal',
-        'Informal',
-        'Flowery',
-        'Mean',
-        'Crazy',
-        'Vegan'
-        );
     }
 
     private function addNewAlternativeFixture($phrase, $alternativePhrase, ObjectManager $manager)
