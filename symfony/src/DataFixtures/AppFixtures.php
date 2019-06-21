@@ -66,6 +66,7 @@ class AppFixtures extends Fixture
         $this->createPhraseTypFixtures($manager);
         $this->createPersonalityTypFixtures($manager);
         $this->createPersonalityFixtures($manager);
+        $this->createBotYoda($manager);
         $this->createBotFixtures($manager);
         //$this->createPhraseFixtures($manager);
         $this->createPhrases($manager);
@@ -73,7 +74,6 @@ class AppFixtures extends Fixture
         $this->createPhraseToReplyFixtures($manager);
 
         $this->createBotMelanie($manager);
-        $this->createBotYoda($manager);
     }
 
     private function createUserFixtures(ObjectManager $manager)

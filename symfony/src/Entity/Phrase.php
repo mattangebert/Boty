@@ -54,6 +54,7 @@ class Phrase
     public function __construct()
     {
         $this->alternativePhrases = new ArrayCollection();
+        $this->replyPhrases = new ArrayCollection();
     }
 
     public function getId(): ?int
