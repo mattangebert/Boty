@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\Bot;
 use App\Entity\Category;
-use App\Entity\Personality;
 use App\Entity\PersonalityTyp;
 use App\Entity\Phrase;
 use App\Entity\PhraseTyp;
@@ -14,6 +13,7 @@ use Symfony\Component\Form\Form;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -43,6 +43,10 @@ class DefaultController extends BaseController
 
     /**
      * @Route("/", name="home")
+     *
+     * @param Request $request
+     * @param UserInterface $user
+     * @return Response|null
      */
     public function index(Request $request, UserInterface $user)
     {

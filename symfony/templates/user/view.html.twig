@@ -22,8 +22,10 @@
             <li>{{ user.name }}</li>
             <li>{{ user.gender }}</li>
             <li>
-                <a href="{{ path('user_delete', { 'id': user.id }) }}">Delete</a>
-                <a href="{{ path('user_edit', { 'id': user.id }) }}">Edit</a>
+{#                <a href="{{ path('user_delete', { 'id': user.id }) }}">Delete</a>#}
+                {% if app.user == user %}
+                    <a href="{{ path('user_edit', { 'id': user.id }) }}">Edit</a>
+                {% endif %}
             </li>
 
         </ul>
